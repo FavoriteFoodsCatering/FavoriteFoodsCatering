@@ -1,4 +1,4 @@
-package com.food.service.user;
+package com.food.service.impl;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

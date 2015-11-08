@@ -9,7 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-//import com.siblinks.ws.util.AppConfigManager;
+import com.food.util.AppConfigManager;
+
 
 @ComponentScan 
 @EnableAutoConfiguration
@@ -27,11 +28,13 @@ public class Application {
 	
     public static void main(String[] args) {
     	
-    	String sibenv = System.getProperty("sib.env");
-		if (sibenv == null) {
-			sibenv = "dev";
+    	String ffcenv = System.getProperty("ffc.env");
+		if (ffcenv == null) {
+			ffcenv = "dev";
 		}
-    	//AppConfigManager.init(sibenv);
+    	
+		AppConfigManager.init(ffcenv);
+    	
         SpringApplication.run(Application.class, args);
     }
 }
