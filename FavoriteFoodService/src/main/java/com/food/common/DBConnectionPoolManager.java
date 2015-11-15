@@ -1,7 +1,9 @@
 package com.food.common;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 import org.apache.commons.dbcp.ConnectionFactory;
@@ -108,12 +110,13 @@ public class DBConnectionPoolManager {
 			DBConnectionPoolManager pool = new DBConnectionPoolManager();
 			con = pool.getConnection();
 			System.out.println(con);
-			/*Statement stmt = con.createStatement();
+			System.out.println("Connected");
+			Statement stmt = con.createStatement();
 			ResultSet rs = stmt
-					.executeQuery("SELECT empno,ename,sal,deptno FROM EMP");
+					.executeQuery("SELECT * from ffc_category");
 			while (rs.next()) {
-				System.out.println(rs.getObject(1));
-			}*/
+				System.out.println(rs.getObject(2));
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
