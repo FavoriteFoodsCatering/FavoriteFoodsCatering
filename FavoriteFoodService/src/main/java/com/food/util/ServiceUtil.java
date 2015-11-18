@@ -77,6 +77,17 @@ public class ServiceUtil {
 			
 			return categoryObj;
 		}
+	 
+	 public static String getCartId(String extCartId,String ordCartId){
+		 
+		 
+		 if(extCartId.equalsIgnoreCase("0"))
+			  return String.valueOf(Integer.parseInt(ordCartId) +1);
+		 else
+			 return extCartId;
+		 
+		 
+	 }
 
 
 }
