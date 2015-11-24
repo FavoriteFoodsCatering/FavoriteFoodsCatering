@@ -12,9 +12,10 @@ import org.springframework.context.annotation.Configuration;
 import com.food.util.AppConfigManager;
 
 
-@ComponentScan 
+@ComponentScan(basePackages = {"com.food"})
 @EnableAutoConfiguration
 @Configuration
+
 
 public class Application {
 	
