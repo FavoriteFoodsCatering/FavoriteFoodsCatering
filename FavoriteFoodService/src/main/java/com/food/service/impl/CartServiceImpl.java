@@ -134,5 +134,54 @@ public class CartServiceImpl implements CartService {
 		return entity;
 		
 	}
+	
+	@Override
+	@RequestMapping(value="/submitOrder" ,method = RequestMethod.POST)
+	public ResponseEntity<Response> submitOrder(@RequestBody  RequestData request) {
+		
+		DaoFactory factory = DaoFactory.getDaoFactory();
+		ObjectDao dao = factory.getObjectDao();
+		
+		Map<String, String> queryParams = new HashMap<String, String>();
+		queryParams.put("userId", request.getCart_data().getUserId());
+		
+		String entityName = "SUBMIT_ORDER";
+		
+		queryParams.clear();
+		queryParams.put("cartId", request.getCart_data().getCartId());
+		queryParams.put("userId", request.getCart_data().getUserId());
+		queryParams.put("orderDate", request.getCart_data().getOrderDate());
+		queryParams.put("userPaymentId", request.getCart_data().getUserPaymentId());
+		queryParams.put("itemId", request.getCart_data().getItemId());
+		queryParams.put("quantity", request.getCart_data().getQty());
+		queryParams.put("amount", request.getCart_data().getAmount());
+		queryParams.put("netAmount", request.getCart_data().getNetAmount());
+		queryParams.put("shiptoFirstName", request.getCart_data().getShiptoFirstName());
+		queryParams.put("shiptoMiddlName", request.getCart_data().getShiptoMiddlName());
+		queryParams.put("shiptoLastName", request.getCart_data().getShiptoLastName());
+		queryParams.put("shiptoAddress1", request.getCart_data().getShiptoAddress1());
+		queryParams.put("shiptoAddress2", request.getCart_data().getShiptoAddress2());
+		queryParams.put("shiptoCity", request.getCart_data().getShiptoCity());
+		queryParams.put("shiptoState", request.getCart_data().getShiptoState());
+		queryParams.put("shiptoZipCode", request.getCart_data().getShiptoZipCode());
+		queryParams.put("discountPercentage", request.getCart_data().getDiscountPercentage());
+		
+		
+		boolean insertFlag ;
+		insertFlag = dao.insertUpdateObject(entityName, queryParams);
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("status", insertFlag);
+		
+		
+		SimpleResponse reponse = new SimpleResponse("" + true,
+				request.getRequest_data_type(),
+				request.getRequest_data_method(), result);
+		
+		ResponseEntity<Response> entity = new ResponseEntity<Response>(reponse,
+				HttpStatus.OK);
+		
+		return entity;
+	}
 
 }

@@ -17,6 +17,10 @@ public class MenuItem {
 	private String serves;
 	private String extraPerPerson;
 	private String imageUrl;
+	private String areaId;
+	private String areaName;
+	private String zipCode;
+	private String SAactive;
 	public String getItemId() {
 		return itemId;
 	}
@@ -76,6 +80,30 @@ public class MenuItem {
 	}
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+	public String getAreaId() {
+		return areaId;
+	}
+	public void setAreaId(String areaId) {
+		this.areaId = areaId;
+	}
+	public String getAreaName() {
+		return areaName;
+	}
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
+	}
+	public String getZipCode() {
+		return zipCode;
+	}
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}
+	public String getSAactive() {
+		return SAactive;
+	}
+	public void setSAactive(String sAactive) {
+		SAactive = sAactive;
 	}
 
 

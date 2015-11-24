@@ -61,4 +61,32 @@ public class MenuServiceImpl implements MenuService {
 	}
 	
 	
+	@Override
+	@RequestMapping(value = "/isServiceAvailable", method = RequestMethod.POST)
+	public ResponseEntity<Response> isServiceAvailable(@RequestBody RequestData request) {
+		System.out.println("Start Serviceq");
+		DaoFactory factory = DaoFactory.getDaoFactory();
+		ObjectDao dao = factory.getObjectDao();
+
+		Map<String, String> queryParams = new HashMap<String, String>();
+		queryParams.put("zipCode", request.getMenu_data().getZipCode());
+
+		String entityName = "IS_SERVICE_AVAILABLE";
+
+		boolean isexists = false;
+
+		List<Object> readObject;
+		readObject = dao.readObjects(entityName, queryParams);
+
+		if (!((Map)readObject.get(0)).get("count").equals("0"))
+			isexists = true;
+
+		SimpleResponse reponse = new SimpleResponse("" + true, request.getRequest_data_type(),
+				request.getRequest_data_method(), isexists);
+
+		ResponseEntity<Response> entity = new ResponseEntity<Response>(reponse, HttpStatus.OK);
+
+		return entity;
+	}
+	
 }

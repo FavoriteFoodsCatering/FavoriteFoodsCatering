@@ -6,6 +6,7 @@ public class RequestData {
 	private String request_data_method;
 	private User user_data;
 	private Cart cart_data;
+	private MenuItem menu_data;
 
 	public String getRequest_data_type() {
 		return request_data_type;
@@ -37,6 +38,14 @@ public class RequestData {
 
 	public void setCart_data(Cart cart_data) {
 		this.cart_data = cart_data;
+	}
+
+	public MenuItem getMenu_data() {
+		return menu_data;
+	}
+
+	public void setMenu_data(MenuItem menu_data) {
+		this.menu_data = menu_data;
 	}
 
 	

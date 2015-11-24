@@ -8,5 +8,6 @@ import com.food.response.Response;
 public interface MenuService {
 	
 	public ResponseEntity<Response> getMenuItems(RequestData request);
+	public ResponseEntity<Response> isServiceAvailable(RequestData request);
 
 }
