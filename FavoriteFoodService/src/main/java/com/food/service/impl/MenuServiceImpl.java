@@ -60,6 +60,39 @@ public class MenuServiceImpl implements MenuService {
 		return entity;
 	}
 	
+	@Override
+	@RequestMapping(value="/getItemDetails" ,method = RequestMethod.POST)
+	public ResponseEntity<Response> getItemDetails(@RequestBody RequestData request) {
+		
+		DaoFactory factory = DaoFactory.getDaoFactory();
+		ObjectDao dao = factory.getObjectDao();
+		
+		Map<String, String> queryParams = new HashMap<String, String>();
+		queryParams.put("itemId", request.getMenu_data().getItemId());
+
+		
+		String entityName = "GET_ITEM_DETAILS";
+
+		List<Object> readObject = null;
+		
+		
+		
+		readObject = dao.readObjects(entityName, queryParams);
+		
+		
+		
+		
+		SimpleResponse reponse = new SimpleResponse("" + true,
+				request.getRequest_data_type(),
+				request.getRequest_data_method(), readObject);
+		
+		ResponseEntity<Response> entity = new ResponseEntity<Response>(reponse,
+				HttpStatus.OK);
+		
+		return entity;
+	}
+	
+	
 	
 	@Override
 	@RequestMapping(value = "/isServiceAvailable", method = RequestMethod.POST)

@@ -9,5 +9,6 @@ public interface MenuService {
 	
 	public ResponseEntity<Response> getMenuItems(RequestData request);
 	public ResponseEntity<Response> isServiceAvailable(RequestData request);
+	public ResponseEntity<Response> getItemDetails(RequestData request);
 
 }
