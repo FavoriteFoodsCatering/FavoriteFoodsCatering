@@ -1,0 +1,23 @@
+<ion-view view-title="Menu">
+  <ion-content>
+  
+      <ion-item ng-repeat="result in results" class="no-seperator">
+	  <p>
+        <b> {{result.categoryDesc}}</b>
+	  </p>
+	  
+		 <ion-item ng-repeat="menu in result.menuItems" class="my-item">
+			 <a href="#/app/menuitems/{{menu.itemId}}"><img src="{{menu.imageUrl}}"/></a>
+			 <p>
+			 {{menu.itemName}} 
+			 </p>
+			 <p>
+			 {{menu.itemDesc}}
+			 </p>
+			 <p><b>${{menu.rate}}</b></p> 
+			 <br/>
+		 </ion-item>
+	</ion-item>
+    
+  </ion-content>
+</ion-view>
