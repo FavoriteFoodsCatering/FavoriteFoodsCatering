@@ -9,10 +9,12 @@
 
 .my-button,
 .my-button:before{
- font-family: 'Gotham SSm A', 'Gotham SSm B', Helvetica, Arial, sans-serif;
+ 
+ font: 12px/30px Georgia, serif;
  }
 .my-button:after{
- font-family: 'Gotham SSm A', 'Gotham SSm B', Helvetica, Arial, sans-serif;
+
+ font: 12px/30px Georgia, serif;
 }
 .my-button.button-bala{
  color: #ef473a;
@@ -29,3 +31,24 @@ border-left: 0px;
 border-right: 0px;
 border-bottom: 0px;
 }
+.button.add-button{
+ width:60px;
+ border-radius: 4px;
+ position:absolute;
+ right:10px;
+ bottom:37px;
+}
+.button.login-button{
+ width:200px;
+ height:10px;
+ border-radius: 4px;
+ position:absolute;
+ right:130px;
+ top:160px; 
+}
+.text.login-text{
+ width:300px;
+ position:absolute;
+ right:60px;
+}
+
