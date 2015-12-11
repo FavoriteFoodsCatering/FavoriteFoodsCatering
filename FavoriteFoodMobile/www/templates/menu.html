@@ -9,7 +9,7 @@
         </button>
       </ion-nav-buttons>
 	  <ion-nav-buttons side="right">
-			<a class="button button-icon icon ion-android-cart" style="font-weight:bold;font-size:11px;">
+			<a class="button button-icon icon ion-android-cart" style="font-weight:bold;font-size:11px;" ng-click="doCheckOut()">
 			{{cartSize}}
 	   </a>
 	    
@@ -26,12 +26,12 @@
     <ion-header-bar class="bar-light">
 	 <a class="button my-button button-bala menu-close" href="#/login">Log In</a> 
 	
-	  <a class="button my-button button-bala menu-close" href="#/app/search" >Sign Up</a>
+	  <a class="button my-button button-bala menu-close" href="#/signup" >Sign Up</a>
       
     </ion-header-bar>
     <ion-content>
       <ion-list>
-        <ion-item class="my-button" menu-close href="#/app/ffcmenuitems">
+        <ion-item class="my-button" menu-close ng-click="getMenuItems()">
           Daily Menu
         </ion-item>
         <ion-item  class="my-button" menu-close href="#/app/search">

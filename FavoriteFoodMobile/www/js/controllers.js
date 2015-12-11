@@ -9,8 +9,29 @@ console.log('in login');
   // listen for the $ionicView.enter event:
   //$scope.$on('$ionicView.enter', function(e) {
   //});
+
+})
+
+.controller('PlaylistsCtrl', function($scope) {
+	console.log('ddd');
+  $scope.playlists = [
+    { title: 'Reggae', id: 1 },
+    { title: 'Chill', id: 2 },
+    { title: 'Dubstep', id: 3 },
+    { title: 'Indie', id: 4 },
+    { title: 'Rap', id: 5 },
+    { title: 'Cowbell', id: 6 },
+	{ title: 'BALA', id: 7 }
+  ];
+})
+
+.controller('LoginCtrl', function($scope, $ionicModal,$stateParams, LoginService, Session, $rootScope, $state, MenuItemService, $timeout,$rootScope) {
+console.log('LoginCtrl');
+		
 $rootScope.cartSize=0;
   // Form data for the login modal
+  
+  
   $scope.loginData = {};
 
   // Create the login modal that we will use later
@@ -36,13 +57,36 @@ $rootScope.cartSize=0;
   $scope.doLogin = function() {
     console.log('Doing login', $scope.loginData);
 	$rootScope.cartSize=0;
+	LoginService.login($scope.loginData).then(function(response){
+		console.log(response.data.request_data_result.isexists +" "+response.data.request_data_result.userId );
+		if(response.data.request_data_result.isexists=="true"){
+			 $scope.loginMessage='';
+			 $rootScope.userId=response.data.request_data_result.userId;
+			 $state.go('app.ffcmenuitems');
+		}
+		else
+			$scope.loginMessage="Invalid User";
+	}
+	
+	); 	
 	$scope.loginData={};
-   $state.go('app.ffcmenuitems');
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-   // $timeout(function() {
-   ///   $scope.closeLogin();
-  //  }, 1000);
+   
+  };
+  
+  $scope.doSignUp = function() {
+    console.log('Doing Sign Up', $scope.loginData);
+	$rootScope.cartSize=0;
+	LoginService.addUser($scope.loginData).then(function(response){
+	 if(response.data.request_data_result==true){
+		 $scope.loginMessage='';
+		  $state.go('login');
+	 }else
+		$scope.loginMessage="Sign Up Failed";
+	}
+	
+	);
+	$scope.loginData={};
+   
   };
   
   $scope.addItem=function(){
@@ -51,22 +95,7 @@ $rootScope.cartSize=0;
   };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-	console.log('ddd');
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 },
-	{ title: 'BALA', id: 7 }
-  ];
-})
-
-.controller('LoginCtrl', function($scope, $stateParams) {
-	console.log('LoginCtrl');
-})
+		
 
 .controller('FFCMenuCtrl', function($scope, $stateParams) {
 	console.log('FFCMenuCtrl');
@@ -75,19 +104,48 @@ $rootScope.cartSize=0;
 .controller('PlaylistCtrl', function($scope, $stateParams) {
 })
 
-.controller('MenuItemCtrl', function($scope,$stateParams, Session, $rootScope, $state, MenuItemService, $timeout,$rootScope) {
+.controller('MenuItemCtrl', function($scope,$stateParams, Session, $rootScope, $state, MenuItemService, $timeout,$rootScope,$ionicHistory) {
 	console.log('MenuItemCtrl');
 	
-	$scope.addItem=function(){
-	  console.log('add item');
-	  $rootScope.cartSize = $rootScope.cartSize+1;
+	if($state.current.name=='app.ffcmenuitems'){
+		console.log('menu');
+		 MenuItemService.getMenuItems().then(function(response) {
+		$scope.request_data_type = response.data.request_data_type;
+		$scope.results = response.data.request_data_result;
+		$state.go('app.ffcmenuitems');
+	  });
+	}
+	$scope.addItem=function(itemId,rate){
+	  console.log('add item :'+itemId +' ' +rate+' '+ $rootScope.userId);
+	  
+	  MenuItemService.addItem($rootScope.userId,itemId,rate).then(function(response){
+		  if(response.data.request_data_result.status==true){
+		      $rootScope.cartSize = $rootScope.cartSize+1;
+		  }else{
+			  console.log('error adding item');
+		  }
+	  }		  
+	  );
+	  
   };
   
-	MenuItemService.getMenuItems().then(function(response) {
-    $scope.request_data_type = response.data.request_data_type;
-    $scope.results = response.data.request_data_result;
-  });
+   $scope.doCheckOut=function(){
+   console.log('Check out');
+   $state.go('checkout');
+   };
 
+	$scope.getMenuItems=function(){   
+	  MenuItemService.getMenuItems().then(function(response) {
+		$scope.request_data_type = response.data.request_data_type;
+		$scope.results = response.data.request_data_result;
+		$state.go('app.ffcmenuitems');
+	  });
+	};
+  
+    $scope.backCheckOut = function(){
+		console.log('back');
+		$ionicHistory.goBack();
+	};
  
 })
 

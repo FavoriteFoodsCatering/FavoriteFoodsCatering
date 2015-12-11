@@ -99,10 +99,16 @@ public class UserServiceImpl implements UserService {
 		
 		if(! ((Map)readObject.get(0)).get("count").equals("0"))
 			isexists =true;
+		
+		Map<String,String> response = new HashMap<String,String>();
+		
+		response.put("isexists", Boolean.toString(isexists));
+		if(((Map)readObject.get(0)).get("userId")!=null)
+			response.put("userId", ((Map)readObject.get(0)).get("userId").toString());
 
 		SimpleResponse reponse = new SimpleResponse("" + true,
 				request.getRequest_data_type(),
-				request.getRequest_data_method(), isexists);
+				request.getRequest_data_method(), response);
 		
 		ResponseEntity<Response> entity = new ResponseEntity<Response>(reponse,
 				HttpStatus.OK);

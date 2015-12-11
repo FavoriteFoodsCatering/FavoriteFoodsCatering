@@ -1,3 +1,10 @@
+<ion-nav-bar>
+ <ion-nav-back-button class="button-clear">
+    <i class="ion-arrow-left-c"></i> Back
+  </ion-nav-back-button>
+</ion-nav-bar>
+
+
 <ion-view view-title="Menu">
   <ion-content>
   
@@ -15,7 +22,7 @@
 			 {{menu.itemDesc}}
 			 </p></br>
 			 <p><b>${{menu.rate}}</b>
-			 <span class="ddd"><button class="button  button-small button-assertive add-button" ng-click="addItem()"> Add </button></span></p>	
+			 <span class="ddd"><button class="button  button-small button-assertive add-button" ng-click="addItem(menu.itemId,menu.rate)"> Add </button></span></p>	
 			 <br/>
 		 </ion-item>
 	</ion-item>

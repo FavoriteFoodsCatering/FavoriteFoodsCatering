@@ -48,9 +48,9 @@ angular.module('starter.services', ['starter.config'])
 .factory('MenuItemService', function($http, ENV) {
 	
 	console.log("Response  inside MenuItemService :" + ENV.apiUrl);
-   var menuItemService = {};
+    var menuItemService = {};
   
-    menuItemService.getMenuItems= function() {
+    menuItemService.getMenuItems = function() {
        
         return $http({
             url: ENV.apiUrl + 'menu/getMenuItems',
@@ -69,7 +69,85 @@ angular.module('starter.services', ['starter.config'])
             return response;
         });
     };
+	
+	menuItemService.addItem = function(userId,itemId,qty) {
+       
+        return $http({
+            url: ENV.apiUrl + 'cart/addToCart',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: {
+                "request_data_type": "menuItem",
+                "request_data_method": "addItem",
+                 "cart_data": {
+				        	"userId":userId,
+                            "itemId":itemId,
+                            "qty":"1"
+				 }
+            }
+        }).then(function(response) {
+            console.log("Response  addItem :" + response.data.request_data_result);
+            return response;
+        });
+    };
+	
+	
 	 return menuItemService;
+})
+
+
+.factory('LoginService', function($http, ENV) {
+	
+   console.log("Response  inside LoginService :" + ENV.apiUrl);
+   var logInService = {};
+  
+    logInService.login= function(loginData) {
+       
+        return $http({
+            url: ENV.apiUrl + 'user/checkUser',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: {
+                "request_data_type": "User",
+                "request_data_method": "checkUser",
+                 "user_data": {
+					 "userName":loginData.username,
+					 "password":loginData.password
+				}
+            }
+        }).then(function(response) {
+            console.log("Response  login :" + response.data.request_data_result);
+            return response;
+        });
+    };
+	
+	logInService.addUser= function(loginData) {
+       
+        return $http({
+            url: ENV.apiUrl + 'user/addUser',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: {
+                "request_data_type": "User",
+                "request_data_method": "addUser",
+                 "user_data": {
+					 "userName":loginData.username,
+					 "password":loginData.password
+				}
+            }
+        }).then(function(response) {
+            console.log("Response  SignUp :" + response.data.request_data_result);
+            return response;
+        });
+    };
+	
+	 return logInService;
 })
 	
 .factory('ItemDetailService', function($http, ENV) {

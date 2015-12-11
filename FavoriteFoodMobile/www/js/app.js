@@ -28,8 +28,8 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.services'])
     .state('app', {
     url: '/app',
     abstract: true,
-    templateUrl: 'templates/menu.html'
-    //controller: 'AppCtrl'
+    templateUrl: 'templates/menu.html',
+    controller: 'MenuItemCtrl'
   })
 
   .state('app.search', {
@@ -84,7 +84,25 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.services'])
     url: '/login',
     
         templateUrl: 'templates/login.html',
-        controller: 'AppCtrl'
+        controller: 'LoginCtrl'
+	
+	
+  })
+  
+  .state('signup', {
+    url: '/signup',
+    
+        templateUrl: 'templates/signup.html',
+        controller: 'LoginCtrl'
+	
+	
+  })
+  
+   .state('checkout', {
+    url: '/checkout',
+    
+        templateUrl: 'templates/checkout.html',
+        controller: 'MenuItemCtrl'
 	
 	
   })

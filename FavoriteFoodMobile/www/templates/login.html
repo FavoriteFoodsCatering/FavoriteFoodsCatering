@@ -7,6 +7,7 @@
       <button class="button button-clear" ng-click="closeLogin()">Close</button>
     </div>
 	-->
+	
   </ion-header-bar>
  
   <ion-content>
@@ -18,7 +19,9 @@
         
           <input type="password" style="position:absolute;right:140px;top:90px;" ng-model="loginData.password" placeholder="Password">
         
+		
       </div>
+	   <label style="position:absolute;right:210px;top:20px"><font style="color:red"> {{loginMessage}}</font> </label>
        <button class="button button-small button-assertive login-button" type="submit">Log in</button>
    </form>
   </ion-content>
