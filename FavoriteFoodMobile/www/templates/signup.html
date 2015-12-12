@@ -1,0 +1,28 @@
+<ion-model-view title="">
+
+  <ion-header-bar>
+  <!--
+    <h1 class="title">Login</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeLogin()">Close</button>
+    </div>
+	-->
+	
+  </ion-header-bar>
+ 
+  <ion-content>
+    <form ng-submit="doSignUp()">
+      <div class="list">
+        
+          <input type="text" style="position:absolute;right:140px;top:40px;" ng-model="loginData.username" placeholder="Username">
+        <br/>
+        
+          <input type="password" style="position:absolute;right:140px;top:90px;" ng-model="loginData.password" placeholder="Password">
+        
+		
+      </div>
+	   <label style="position:absolute;right:210px;top:20px"><font style="color:red"> {{loginMessage}}</font> </label>
+       <button class="button button-small button-assertive login-button" type="submit">Sign Up</button>
+   </form>
+  </ion-content>
+</ion-model-view>
