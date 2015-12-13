@@ -86,39 +86,50 @@ public class CartServiceImpl implements CartService {
 		
 		Map<String, String> queryParams = new HashMap<String, String>();
 		queryParams.put("userId", request.getCart_data().getUserId());
-		queryParams.put("cartId", request.getCart_data().getCartId());
-		
+		queryParams.put("cartId", request.getCart_data().getCartId());		
 		String entityName = "GET_TOTAL_AMT";
-
-		List<Object> readObject = null;
+		List<Object> readObject = null;		
+		readObject = dao.readObjects(entityName, queryParams);		
+		String totalAmt = ((Map)readObject.get(0)).get("totalAmt").toString();
+		System.out.println(totalAmt);
 		
 		
-		
-		readObject = dao.readObjects(entityName, queryParams);
-		
-		String amount = ((Map)readObject.get(0)).get("totalAmt").toString();
-		System.out.println(amount);
-		
-		entityName = "GET_NO_TAX_AMT";
-		
-		List readObject1 = dao.readObjects(entityName, queryParams);
-		
+		entityName = "GET_NO_TAX_AMT";		
+		List readObject1 = dao.readObjects(entityName, queryParams);		
 		String noTaxAmt = ((Map)readObject1.get(0)).get("noTaxAmt").toString();
-		System.out.println(noTaxAmt);
+		System.out.println(noTaxAmt);		
+		double taxableAmt = Double.parseDouble(totalAmt)-Double.parseDouble(noTaxAmt);		
+		double tax =(taxableAmt*8.75)/100;		
+		double netAmount= Double.parseDouble(totalAmt) + tax;
+		System.out.println(netAmount);
 		
-		double taxableAmt = Double.parseDouble(amount)-Double.parseDouble(noTaxAmt);
 		
-		double tax =(taxableAmt*8.75)/100;
+		Map<String, String> queryItemParams = new HashMap<String, String>();
+		queryItemParams.put("itemId", request.getCart_data().getItemId());	
+		String entityItemName = "GET_ITEM_DETAILS";
+		List<Object> readItemObject = null;
+		readItemObject = dao.readObjects(entityItemName, queryItemParams);
+		String itemName = ((Map)readItemObject.get(0)).get("itemName").toString();  
+		String imageUrl = ((Map)readItemObject.get(0)).get("imageUrl").toString();
+		String description = ((Map)readItemObject.get(0)).get("description").toString();
+		String rate = ((Map)readItemObject.get(0)).get("rate").toString();
+		String qty = request.getCart_data().getQty();
+		String itemId = request.getCart_data().getItemId();
 		
-		double totalAmount= Double.parseDouble(amount) + tax;
-		
-		System.out.println(totalAmount);
+	
+		System.out.println("Item name is "+qty);
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		//result.put("status", insertFlag);
-		result.put("amount", Double.parseDouble(amount));
+		result.put("totalAmt", Double.parseDouble(totalAmt));
 		result.put("tax", tax);
-		result.put("totalAmount", totalAmount);
+		result.put("netAmount", netAmount);
+		result.put("itemName", itemName);
+		result.put("imageUrl", imageUrl);
+		result.put("itemDesc", description);
+		result.put("qty", qty);
+		result.put("itemId", itemId);	
+		result.put("rate", rate);	
 		
 		
 		SimpleResponse reponse = new SimpleResponse("" + true,
