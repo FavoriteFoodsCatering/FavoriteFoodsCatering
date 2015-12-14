@@ -55,8 +55,16 @@ $rootScope.cartSize=0;
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
+	  $scope.loginMessage='';
     console.log('Doing login', $scope.loginData);
+	//console.log('user name', $scope.loginData.username);
 	$rootScope.cartSize=0;
+	if(angular.isUndefined($scope.loginData.username) || $scope.loginData.username == null || $scope.loginData.username == ""){
+		$scope.loginMessage="Invalid User";
+		$scope.loginData.username='';
+		return true;
+	}
+		
 	LoginService.login($scope.loginData).then(function(response){
 		console.log(response.data.request_data_result.isexists +" "+response.data.request_data_result.userId );
 		if(response.data.request_data_result.isexists=="true"){
@@ -74,12 +82,18 @@ $rootScope.cartSize=0;
   };
   
   $scope.doSignUp = function() {
-    console.log('Doing Sign Up', $scope.loginData);
+    console.log('Doing Sign Up', $scope.loginData.username);
+	
 	$rootScope.cartSize=0;
+	if(angular.isUndefined($scope.loginData.username) || $scope.loginData.username == null){
+		$scope.loginMessage="Invalid User";
+		$scope.loginData.username='';
+		return true;
+	}
 	LoginService.addUser($scope.loginData).then(function(response){
 	 if(response.data.request_data_result==true){
 		 $scope.loginMessage='';
-		  $state.go('login');
+		  $state.go('app.ffcmenuitems');
 	 }else
 		$scope.loginMessage="Sign Up Failed";
 	}
