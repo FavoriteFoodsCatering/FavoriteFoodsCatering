@@ -49,6 +49,7 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.services'])
         }
       }
     })
+	
     .state('app.playlists', {
       url: '/playlists',
       views: {
@@ -82,12 +83,9 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.services'])
   
   .state('login', {
     url: '/login',
-    
         templateUrl: 'templates/login.html',
         controller: 'LoginCtrl'
-	
-	
-  })
+ })
   
   .state('signup', {
     url: '/signup',
@@ -97,6 +95,19 @@ angular.module('starter', ['ionic', 'starter.controllers','starter.services'])
 	
 	
   })
+  
+  .state('sendmail', {
+        url: '/sendmail',
+        templateUrl: 'templates/sendemail.html',
+        controller: 'MenuItemCtrl'
+   })
+   
+   .state('help', {
+      url: '/help',
+      templateUrl: 'templates/help.html',
+	  controller: 'MenuItemCtrl'
+     })
+
   
    .state('checkout', {
     url: '/checkout',
