@@ -96,7 +96,6 @@ public class CartServiceImpl implements CartService {
 		String totalAmt = ((Map)readObject.get(0)).get("totalAmt").toString();
 		System.out.println(totalAmt);
 		
-		
 		entityName = "GET_NO_TAX_AMT";		
 		List readObject1 = dao.readObjects(entityName, queryParams);		
 		String noTaxAmt = ((Map)readObject1.get(0)).get("noTaxAmt").toString();
@@ -105,7 +104,6 @@ public class CartServiceImpl implements CartService {
 		double tax =(taxableAmt*8.75)/100;		
 		double netAmount= Double.parseDouble(totalAmt) + tax;
 		System.out.println(netAmount);
-		
 		Map<String,Object> result = new HashMap<String,Object>();
 		//result.put("status", insertFlag);
 		result.put("totalAmt", Double.parseDouble(totalAmt));
@@ -121,14 +119,16 @@ public class CartServiceImpl implements CartService {
 		Map<String, List<Object>> items = new HashMap<String, List<Object>>();
 		List<Object> itemsLst = new ArrayList<Object>();
 		if(null != readItemObject) {	
-			Cart mnu = new Cart();
-			mnu.setItemId(readItemObject.get(0).toString());
-			mnu.setItemName(readItemObject.get(1).toString());
-			mnu.setDescription(readItemObject.get(2).toString());
-			mnu.setQty(readItemObject.get(3).toString());
-			mnu.setImageUrl(readItemObject.get(4).toString());			
-			mnu.setAmount(readItemObject.get(5).toString());
-			itemsLst.add(mnu);
+			for(int i=0; i<readItemObject.size(); i++) {
+				Cart mnu = new Cart();
+				mnu.setItemId(((Map)readItemObject.get(i)).get("itemId").toString());
+				mnu.setItemName(((Map)readItemObject.get(i)).get("itemName").toString());
+				mnu.setDescription(((Map)readItemObject.get(i)).get("description").toString());
+				mnu.setQty(((Map)readItemObject.get(i)).get("quantity").toString());
+				mnu.setImageUrl(((Map)readItemObject.get(i)).get("imageUrl").toString());			
+				mnu.setAmount(((Map)readItemObject.get(i)).get("price").toString());
+				itemsLst.add(mnu);
+			}			
 		}
 		items.put("items", itemsLst);
 		result.put("itemsObj", items);
