@@ -105,7 +105,6 @@ public class CartServiceImpl implements CartService {
 		double tax =(taxableAmt*8.75)/100;		
 		double netAmount= Double.parseDouble(totalAmt) + tax;
 		System.out.println(netAmount);
-		
 		Map<String,Object> result = new HashMap<String,Object>();
 		//result.put("status", insertFlag);
 		result.put("totalAmt", Double.parseDouble(totalAmt));

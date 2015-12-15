@@ -1,8 +1,9 @@
 <ion-model-view title="">
 
-  <ion-header-bar>
-  <!--
-    <h1 class="title">Login</h1>
+  <ion-header-bar class="bar bar-header bar-assertive">
+
+    <h1 class="title"></h1>
+	  <!--
     <div class="buttons">
       <button class="button button-clear" ng-click="closeLogin()">Close</button>
     </div>
@@ -13,16 +14,16 @@
   <ion-content>
     <form ng-submit="doSignUp()">
       <div class="list">
+         <img src="../img/logo.jpg"  height="40" width="50" style="position:absolute;right:195px;top:40px;"/>
+		
+          <input type="text" style="position:absolute;right:105px;top:100px;" ng-model="loginData.username" placeholder="Username">
         
-          <input type="text" style="position:absolute;right:140px;top:40px;" ng-model="loginData.username" placeholder="Username">
-        <br/>
-        
-          <input type="password" style="position:absolute;right:140px;top:90px;" ng-model="loginData.password" placeholder="Password">
+          <input type="password" style="position:absolute;right:105px;top:150px;" ng-model="loginData.password" placeholder="Password">
         
 		
       </div>
-	   <label style="position:absolute;right:210px;top:20px"><font style="color:red"> {{loginMessage}}</font> </label>
-       <button class="button button-small button-assertive login-button" type="submit">Sign Up</button>
+	   <label style="position:absolute;right:180px;top:10px"><font style="color:red"> {{loginMessage}}</font> </label>
+       <button class="button button-small button-assertive login-button" type="submit" style="position:absolute;right:110px;top:240px;">Sign Up</button>
    </form>
   </ion-content>
 </ion-model-view>

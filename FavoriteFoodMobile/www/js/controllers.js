@@ -55,8 +55,16 @@ $rootScope.cartSize=0;
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
+	  $scope.loginMessage='';
     console.log('Doing login', $scope.loginData);
+	//console.log('user name', $scope.loginData.username);
 	$rootScope.cartSize=0;
+	if(angular.isUndefined($scope.loginData.username) || $scope.loginData.username == null || $scope.loginData.username == ""){
+		$scope.loginMessage="Invalid User";
+		$scope.loginData.username='';
+		return true;
+	}
+		
 	LoginService.login($scope.loginData).then(function(response){
 		console.log(response.data.request_data_result.isexists +" "+response.data.request_data_result.userId );
 		if(response.data.request_data_result.isexists=="true"){
@@ -74,12 +82,18 @@ $rootScope.cartSize=0;
   };
   
   $scope.doSignUp = function() {
-    console.log('Doing Sign Up', $scope.loginData);
+    console.log('Doing Sign Up', $scope.loginData.username);
+	
 	$rootScope.cartSize=0;
+	if(angular.isUndefined($scope.loginData.username) || $scope.loginData.username == null){
+		$scope.loginMessage="Invalid User";
+		$scope.loginData.username='';
+		return true;
+	}
 	LoginService.addUser($scope.loginData).then(function(response){
 	 if(response.data.request_data_result==true){
 		 $scope.loginMessage='';
-		  $state.go('login');
+		  $state.go('app.ffcmenuitems');
 	 }else
 		$scope.loginMessage="Sign Up Failed";
 	}
@@ -104,8 +118,10 @@ $rootScope.cartSize=0;
 .controller('PlaylistCtrl', function($scope, $stateParams) {
 })
 
-.controller('MenuItemCtrl', function($scope,$stateParams, Session, $rootScope, $state, MenuItemService, $timeout,$rootScope,$ionicHistory) {
+.controller('MenuItemCtrl', function($scope,$stateParams, Session, $rootScope, $state, MenuItemService, $timeout,$rootScope,$ionicHistory,$ionicActionSheet) {
 	console.log('MenuItemCtrl');
+	
+	
 	
 	if($state.current.name=='app.ffcmenuitems'){
 		console.log('menu');
@@ -115,6 +131,7 @@ $rootScope.cartSize=0;
 		$state.go('app.ffcmenuitems');
 	  });
 	}
+	
 	$scope.addItem=function(itemId,rate){
 	  console.log('add item :'+itemId +' ' +rate+' '+ $rootScope.userId);
 	  
@@ -126,8 +143,54 @@ $rootScope.cartSize=0;
 		  }
 	  }		  
 	  );
+	}; 
 	  
+	  $scope.show = function() {
+        console.log('show');
+		   // Show the action sheet
+		   var hideSheet = $ionicActionSheet.show({
+			 buttons: [
+			   { text: '<font size="3">Problem with order</font>' },
+			   { text: '<font size="3">Delivery Issue</font>' }
+			 ],
+			 titleText: 'Email & Support',
+			 cancelText: '<font size="3">Cancel</font>',
+			 cancel: function() {
+				  // add cancel code..
+				},
+			 buttonClicked: function(index) {
+				 console.log(index);
+					$state.go('sendmail');
+			   return true;
+			 }
+			// buttonClicked:sendFeedback()
+		   });
+
+		   // For example's sake, hide the sheet after two seconds
+		  /* $timeout(function() {
+			 hideSheet();
+		   }, 2000);*/
+
   };
+  
+   $scope.sendFeedback= function() {
+        if(window.plugins && window.plugins.emailComposer) {
+            window.plugins.emailComposer.showEmailComposerWithCallback(function(result) {
+                console.log("Response -> " + result);
+            }, 
+            "Feedback for your App", // Subject
+            "",                      // Body
+            ["test@example.com"],    // To
+            null,                    // CC
+            null,                    // BCC
+            false,                   // isHTML
+            null,                    // Attachments
+            null);                   // Attachment Data
+        }
+    };
+ 
+	  
+  
   
    $scope.doCheckOut=function(){
    console.log('Check out');
@@ -146,6 +209,20 @@ $rootScope.cartSize=0;
 		console.log('back');
 		$ionicHistory.goBack();
 	};
+	
+	$scope.cancelEmail = function(){
+		console.log('back');
+		$ionicHistory.goBack();
+	};
+	
+	$scope.goback = function(){
+		console.log('goback');
+		$ionicHistory.goBack();
+	};
+ 
+	$scope.doHelp=function(){
+	 $state.go('help');
+    };
  
 })
 
