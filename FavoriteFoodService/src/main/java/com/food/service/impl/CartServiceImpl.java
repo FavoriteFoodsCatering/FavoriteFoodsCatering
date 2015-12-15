@@ -81,6 +81,7 @@ public class CartServiceImpl implements CartService {
 		return entity;
 	}
 	
+	
 	@RequestMapping(value="/checkOut" ,method = RequestMethod.POST)
 	public ResponseEntity<Response> checkOut(@RequestBody  RequestData request) {
 		
@@ -105,7 +106,6 @@ public class CartServiceImpl implements CartService {
 		double netAmount= Double.parseDouble(totalAmt) + tax;
 		System.out.println(netAmount);
 		Map<String,Object> result = new HashMap<String,Object>();
-		//result.put("status", insertFlag);
 		result.put("totalAmt", Double.parseDouble(totalAmt));
 		result.put("tax", tax);
 		result.put("netAmount", netAmount);
