@@ -3,6 +3,7 @@
  */
 package com.food.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.food.dao.DaoFactory;
 import com.food.dao.ObjectDao;
+import com.food.model.Cart;
+import com.food.model.MenuItem;
 import com.food.model.RequestData;
 import com.food.response.Response;
 import com.food.response.SimpleResponse;
@@ -103,44 +106,39 @@ public class CartServiceImpl implements CartService {
 		double netAmount= Double.parseDouble(totalAmt) + tax;
 		System.out.println(netAmount);
 		
-		
-		Map<String, String> queryItemParams = new HashMap<String, String>();
-		queryItemParams.put("itemId", request.getCart_data().getItemId());	
-		String entityItemName = "GET_ITEM_DETAILS";
-		List<Object> readItemObject = null;
-		readItemObject = dao.readObjects(entityItemName, queryItemParams);
-		String itemName = ((Map)readItemObject.get(0)).get("itemName").toString();  
-		String imageUrl = ((Map)readItemObject.get(0)).get("imageUrl").toString();
-		String description = ((Map)readItemObject.get(0)).get("description").toString();
-		String rate = ((Map)readItemObject.get(0)).get("rate").toString();
-		String qty = request.getCart_data().getQty();
-		String itemId = request.getCart_data().getItemId();
-		
-	
-		System.out.println("Item name is "+qty);
-		
 		Map<String,Object> result = new HashMap<String,Object>();
 		//result.put("status", insertFlag);
 		result.put("totalAmt", Double.parseDouble(totalAmt));
 		result.put("tax", tax);
 		result.put("netAmount", netAmount);
-		result.put("itemName", itemName);
-		result.put("imageUrl", imageUrl);
-		result.put("itemDesc", description);
-		result.put("qty", qty);
-		result.put("itemId", itemId);	
-		result.put("rate", rate);	
 		
-		
+		Map<String, String> queryItemParams = new HashMap<String, String>();
+		queryItemParams.put("cartId", request.getCart_data().getCartId());
+		queryItemParams.put("userId", request.getCart_data().getUserId());
+		String entityItemName = "GET_ITEM_DETAILS";
+		List<Object> readItemObject = null;
+		readItemObject = dao.readObjects(entityItemName, queryItemParams);
+		Map<String, List<Object>> items = new HashMap<String, List<Object>>();
+		List<Object> itemsLst = new ArrayList<Object>();
+		if(null != readItemObject) {	
+			Cart mnu = new Cart();
+			mnu.setItemId(readItemObject.get(0).toString());
+			mnu.setItemName(readItemObject.get(1).toString());
+			mnu.setDescription(readItemObject.get(2).toString());
+			mnu.setQty(readItemObject.get(3).toString());
+			mnu.setImageUrl(readItemObject.get(4).toString());			
+			mnu.setAmount(readItemObject.get(5).toString());
+			itemsLst.add(mnu);
+		}
+		items.put("items", itemsLst);
+		result.put("itemsObj", items);
+				
 		SimpleResponse reponse = new SimpleResponse("" + true,
 				request.getRequest_data_type(),
 				request.getRequest_data_method(), result);
 		
 		ResponseEntity<Response> entity = new ResponseEntity<Response>(reponse,
 				HttpStatus.OK);
-		
-		
-		
 		
 		return entity;
 		
