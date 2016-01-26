@@ -12,6 +12,9 @@ public class Cart {
 	private String cartId;
 	private String userId;
 	private String itemId;
+	private String itemName;
+	private String description;
+	private String imageUrl;
 	private String qty;
 	private String delFromCart;	
 	private String orderDate;
@@ -143,7 +146,24 @@ public class Cart {
 	public void setUpdateTime(String updateTime) {
 		this.updateTime = updateTime;
 	}
-	
+	public String getItemName() {
+		return itemName;
+	}
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
 	
 
 }
