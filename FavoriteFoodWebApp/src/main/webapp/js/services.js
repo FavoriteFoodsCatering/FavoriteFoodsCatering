@@ -181,6 +181,39 @@ angular.module('ffcWebApp.services', ['ffcWebApp.config'])
 })
 
 
+.factory('CheckOutService', function($http, ENV) {
+	
+	console.log("Response  inside CheckOutService :" + ENV.apiUrl);
+   var checkOutService = {};
+  
+   checkOutService.checkOut= function(userId,cartId) {
+       
+        return $http({
+            url: ENV.apiUrl + 'cart/checkOut',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: {
+                "request_data_type": "checkOut",
+                "request_data_method": "checkOut",
+                 "cart_data": {
+					 "userId":userId,
+					 "cartId":cartId
+						}
+            }
+        }).then(function(response) {
+            console.log("Response  Checkout :" + response.data.request_data_result);
+            return response;
+        });
+    };
+ 
+ 
+  return checkOutService;
+})
+
+
+
 
 
 // Service to create and destroy sessions

@@ -99,8 +99,13 @@ public class CartServiceImpl implements CartService {
 		System.out.println(totalAmt);
 		
 		entityName = "GET_NO_TAX_AMT";		
-		List readObject1 = dao.readObjects(entityName, queryParams);		
-		String noTaxAmt = ((Map)readObject1.get(0)).get("noTaxAmt").toString();
+		List readObject1 = dao.readObjects(entityName, queryParams);	
+		String noTaxAmt = " ";
+		if( ((Map)readObject1.get(0)).get("noTaxAmt")!=null)
+		 	noTaxAmt = ((Map)readObject1.get(0)).get("noTaxAmt").toString();
+		else
+			noTaxAmt="0";
+			 
 		System.out.println(noTaxAmt);		
 		double taxableAmt = Double.parseDouble(totalAmt)-Double.parseDouble(noTaxAmt);		
 		double tax =(taxableAmt*8.75)/100;		
@@ -131,8 +136,8 @@ public class CartServiceImpl implements CartService {
 				itemsLst.add(mnu);
 			}			
 		}
-		items.put("items", itemsLst);
-		result.put("itemsObj", items);
+		//items.put("items", itemsLst);
+		result.put("itemsObj", itemsLst);
 				
 		SimpleResponse reponse = new SimpleResponse("" + true,
 				request.getRequest_data_type(),

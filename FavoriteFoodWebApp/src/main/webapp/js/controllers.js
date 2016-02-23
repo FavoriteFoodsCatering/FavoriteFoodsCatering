@@ -259,6 +259,8 @@ $rootScope.cartSize=0;
 	  });
 	});
   
+	
+	
   
   
 	
