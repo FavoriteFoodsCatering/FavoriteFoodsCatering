@@ -3,13 +3,36 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
+<script>
+		
+</script>
 </head>
 <body>
 
 <section class="content pad1">
     <div class="container">
       <div class="row">
-        <ul class="tabs">
+			<p align="center">
+				<font color=red style="font-weight: bold">Catering available
+					Monday to Saturday</font>
+			</p>
+			<div >
+					<input id="bulkOrder" type="radio" name="radio" value="bulkOrder" /><label for="first">Bulk Order</label>
+					<p>Food is served family style. The minimum order is $250.00</p>
+					<p>The catered meal is offered at the promotional rate of $20.00
+						Per Person + Sales Tax (FREE delivery)</p>
+					<p>Choose up to 3 entrees / 2 sides / 2 appetizers/desserts.</p>
+					<input id="lunchBox" type="radio" name="radio" value="lunchBox" /><label for="first">Lunch Box</label>
+					<p>for working lunch meetings, consider lunch boxes consisting of 1 sandwich, 2 small sides, and 1 cookie. This lighter fare is offered at the promotional rate of $13.00 per person:</p>
+					<p>Hit the check box to select this lunch box item.
+						Select up to 3 different kinds of sandwiches.
+						The two sides are the chef's selection.
+						Drinks are ordered individually and are incremental cost items.
+					</p>
+			
+			</div>
+			
+			<ul class="tabs">
         
         
           <li ng-repeat="result in results">
@@ -18,8 +41,7 @@
             <label for="tab{{result.categoryId}}">{{ result.categoryDesc}}</label>
             <div id="tab-content1" class="tab-content">
               <div class="animated  fadeInRight">
-                
-                <div class="grid_3 margin-left-15" ng-repeat="menu in result.menuItems ">
+           <div class="grid_3 margin-left-15" ng-repeat="menu in result.menuItems ">
                   <div class="teamwrap teambox">
                 <!--   {{result.menuItems[0].imageUrl}}  -->
                     <img src="{{menu.imageUrl}}" alt="">
@@ -40,6 +62,7 @@
         <!-- <div class="clear sep__1"></div>
         <div class="clear sep__1"></div> -->
       </div>
+      
     </div>
   </section>
  
