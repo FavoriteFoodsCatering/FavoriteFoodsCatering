@@ -179,7 +179,7 @@ p {
 input, textarea {
   border-radius: 0 !important;
   outline: none !important;
-  -webkit-appearance: none;
+  -webkit-appearance: radio;
 
 }
 
@@ -1310,3 +1310,6 @@ color: #ccc;
     width: auto;
   }
 }
+
+
+
