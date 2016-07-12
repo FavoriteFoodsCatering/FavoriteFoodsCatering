@@ -214,6 +214,39 @@ angular.module('ffcWebApp.services', ['ffcWebApp.config'])
 
 
 
+.factory('OrderService', function($http, ENV) {
+	
+	console.log("Response  inside OrderService :" + ENV.apiUrl);
+   var orderService = {};
+  
+   orderService.reviewOrder = function(userId,cartId, numPpl) {
+ 	   console.log("UserId :" + userId + " cartId " + cartId + " no of ppl " + numPpl);
+       return $http({
+           url: ENV.apiUrl + 'cart/previewMenu',
+           method: 'POST',
+           headers: {
+               'Content-Type': 'application/json'
+           },
+           data: {
+               "request_data_type": "checkOut",
+               "request_data_method": "checkOut",
+                "cart_data": {
+					 "userId":userId,
+					 "cartId":cartId,
+					 "numPpl":numPpl
+						}
+           }
+       }).then(function(response) {
+           console.log("Response  Checkout :" + response.data.request_data_result);
+           return response;
+       });
+   };
+ 
+ 
+  return orderService;
+})
+
+
 
 
 // Service to create and destroy sessions

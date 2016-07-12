@@ -8,7 +8,18 @@
  */
 var app=angular.module('ffcWebApp', [
 	'ngRoute','ffcWebApp.services'
-]);
+]).service('sharedProperties', function () {
+    var uniEdit = 0;
+
+    return {
+        getUni: function () {
+            return uniEdit;
+        },
+        setUni: function(value) {
+            uniEdit = value;
+        }
+    };
+});
 
 /**
  * Configure the Routes
@@ -20,8 +31,13 @@ app.config(['$routeProvider', function ($routeProvider) {
     .when("/contacts", {templateUrl: "partials/contacts.html", controller: "PageCtrl"})
     .when("/orders", {templateUrl: "partials/orders.html", controller: "CheckOutCtrl"})
     .when("/testimonials", {templateUrl: "partials/testimonials.html", controller: "PageCtrl"})
+    .when("/reviewOrder", { templateUrl: "partials/checkout.html", controller: "OrderCtrl"})
     .otherwise("/404", {templateUrl: "partials/404.html", controller: "PageCtrl"});
+  
+  
+  
 }]);
+
 
 /**
  * Controls the Blog
@@ -100,9 +116,7 @@ app.controller('checkCtrl', function (/* $scope, $location, $http */) {
 			  }else{
 				  console.log('error adding item');
 			  }
-		  }		  
-		  );
-		  
+		  });
 		 
 		}; 
 		  
@@ -119,9 +133,24 @@ app.controller('checkCtrl', function (/* $scope, $location, $http */) {
 		  console.log('checkout res : '+$scope.coresults.itemsObj[0].itemName);
 		  
 	  });
-	 
+	  
+	  	 
 	});
 
   
+  
+  app.controller('OrderCtrl', function ($scope,OrderService,$rootScope, $location, $route) {
+	 $scope.reviewOrder = function(NumPpl) { 
+		 console.log("OrderCtrl Controller reporting for duty." + NumPpl);
+	  OrderService.reviewOrder($rootScope.userId,$rootScope.cartId,$scope.NumPpl).then(function(response){
+			$rootScope.orderRes = response.data.request_data_result;
+		  console.log('checkout res : '+$scope.orderRes.shipAddress.add1);
+		$location.path('/reviewOrder');
+		$route.reload();
+		  
+		  
+	  });
+	 };
+	});
   
  

@@ -19,6 +19,7 @@ public class Cart {
 	private String delFromCart;	
 	private String orderDate;
 	private String userPaymentId;
+	private String expDate;
 	private String amount;
 	private String netAmount;
 	private String shiptoFirstName;
@@ -31,6 +32,7 @@ public class Cart {
 	private String shiptoZipCode;
 	private String discountPercentage;
 	private String updateTime;
+	private String numPpl;
 	
 	public String getCartId() {
 		return cartId;
@@ -163,6 +165,18 @@ public class Cart {
 	}
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+	public String getExpDate() {
+		return expDate;
+	}
+	public void setExpDate(String expDate) {
+		this.expDate = expDate;
+	}
+	public String getNumPpl() {
+		return numPpl;
+	}
+	public void setNumPpl(String numPpl) {
+		this.numPpl = numPpl;
 	}
 	
 

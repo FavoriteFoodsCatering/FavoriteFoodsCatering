@@ -5,7 +5,7 @@
 
 </head>
 
-<body>
+<body ng-app="ffcWebApp">
  
   <!--=====================
   Content
@@ -14,7 +14,11 @@
     <div class="container">
       <div class="row">
         <div class="grid_8">
-          <h2>Your Orders</h2>
+           <div ng-hide="coresults.itemsObj.length === 0">
+           	<h2>( No items in this list yet! )</h2>
+           	$('#addDiv').hide();
+           </div>
+           <h2>Your Orders</h2>
           <div ng-repeat="cart in coresults.itemsObj">
           <div class="extra_wrapper">
             <img src="{{cart.imageUrl}}" alt="" class="img_inner fleft inn__1">
@@ -28,9 +32,16 @@
            <hr class="devider"/>
            </div>
           </div>
-
-        <div class="grid_4">
-          <h2>Give your Address and Order</h2>
+		
+        <div id="addDiv" class="grid_4" ng-controller="OrderCtrl">
+        <form id="bookingForm">
+        <!-- <input name="proceedToCheckout" href="#/orders" type="submit" value="Proceed to checkout" style="border: 1;left: 0;top: 0;background-color:yellow;color: black"> -->
+        <input name="NumPpl" id="NumPpl" ng-model="NumPpl" placeHolder="Catering for NoOf People" style="width:150px; height:20px; margin-right: 9px; margin-top: 100px;" type="text" data-constraints="@NotEmpty @Required @NumPpl">
+        <br>
+        <!-- <a href="#/reviewOrder" class="btn">Proceed to checkout</a> -->
+        <input type="button" ng-click="reviewOrder(NumPpl)" value="Proceed to checkout">
+        </form>
+          <!-- <h2>Subtotal </h2>
           <div class="form_title color1">
             We are open 7 days a week - 8 AM to 12 PM <br>+1 101 889 9898</div>
             <form id="bookingForm">
@@ -61,7 +72,7 @@
           <a href="#" class="btn" data-type="reset">Clear</a>
           <a href="#" class="btn" data-type="submit">Continue</a>
         </div>
-      </form>
+      </form> -->
     </div>
   </div>
 </div>

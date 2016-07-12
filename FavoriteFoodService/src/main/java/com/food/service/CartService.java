@@ -10,5 +10,7 @@ public interface CartService {
 	public ResponseEntity<Response> addToCart(RequestData request);
 	public ResponseEntity<Response> checkOut(RequestData request);
 	public ResponseEntity<Response> submitOrder(RequestData request);
+	public ResponseEntity<Response> previewMenu(RequestData request);
+	public ResponseEntity<Response> chargeCreditCard(RequestData request);
 
 }
