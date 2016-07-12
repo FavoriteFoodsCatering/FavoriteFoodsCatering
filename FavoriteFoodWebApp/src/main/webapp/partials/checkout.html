@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Checkout</title>
+<script>
+
+	
+
+</script>
+</head>
+<body>
+	<section class="content">
+		<div class="container">
+			<div class="row">
+			<div class="grid_8">
+				<table style="width:100%">
+				<tr style="border-bottom: inset; background-color: transparent; padding-bottom: 20px;">
+				    <td style="padding-right: 20px;"><h3>1</h3></td>
+				    <td><h3>Shipping address</h3></td>
+					<td>
+						{{orderRes.shipAddress.add1}}<br>
+						{{orderRes.shipAddress.add2}}<br>
+						{{orderRes.shipAddress.city}}<br>
+						{{orderRes.shipAddress.state}}&nbsp;{{orderRes.shipAddress.zip}}<br>
+					</td>
+					<td><a href="">Change</a></td>
+					<br/>					
+				  </tr>
+				<tr></tr>
+				<tr style="border-bottom: inset;">
+				    <td><h3>2</h3></td>
+				    <td><h3>Payment method</h3></td>
+					<td>
+						{{orderRes.cardType}} ending in {{orderRes.cardNo}}<br>
+						Billing address: Same as shipping address.
+						<br/>
+					</td>
+					<td><a href="">Change</a></td>
+				</tr>
+				
+				<!-- <tr style="border-bottom: inset;"><h2>Your Orders</h2></tr> -->
+				<div class="grid_8">
+				<tr>
+					<h2>Your Orders</h2>
+				    <td><h3>3</h3></td>
+				    <td><h3>Review items and shipping</h3></td>
+					<td>									           
+				          <div ng-repeat="cart in orderRes.itemsObj">				          
+				          <div class="extra_wrapper">
+				            <img src="{{cart.imageUrl}}" alt="" class="img_inner fleft inn__1">
+				            <div class="text1 tx__1">
+				              <a href="#">{{cart.itemName}} </a>
+				              <a href="#" class="icon_size pull-right"><i class="fa fa-trash-o"></i></a>              
+				            </div>
+				            <p>{{cart.description}}</p>
+				          </div>
+				           <hr class="devider"/>
+				           </div>			          
+					</td>					
+				  </tr>
+				</div>
+				</table>
+			</div>
+			<div class="grid_4">
+			<a type="button" class="buttonC">Place your Order</a>
+          	<div class="form_title color1">
+          	<span>By placing your order, you agree to Favourite Foods Catering's privacy notice and conditions of use.</span>
+          	<h3>Order Summary</h3>
+          	<table style="width:100%; border: black 1px solid; display:block; ">
+				<tr>
+				    <td>Items:</td>
+				    <td align="right">${{orderRes.totalAmt}}</td>
+				</tr>
+				<tr>
+					<td>Shipping & handling:</td>
+					<td>$0.00</td>
+				  </tr>
+				<tr>
+					<td>Total before tax:</td>
+					<td>${{orderRes.totalAmt}}</td>
+				  </tr>
+				<tr>
+					<td>Estimated tax to be collected:</td>
+					<td>${{orderRes.tax}}</td>
+				  </tr>
+				<tr>
+				<td>Order Total</td>
+				<td>${{orderRes.netAmount}}</td>
+				</tr>
+				</table>
+          	</div>
+			</div>
+		</div>
+		</div>
+	</section>
+</body>
+</html>
