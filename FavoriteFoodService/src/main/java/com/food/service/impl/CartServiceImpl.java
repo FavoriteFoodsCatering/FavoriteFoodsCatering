@@ -3,11 +3,20 @@
  */
 package com.food.service.impl;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,15 +25,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.food.dao.DaoFactory;
 import com.food.dao.ObjectDao;
 import com.food.model.Cart;
 import com.food.model.MenuItem;
 import com.food.model.RequestData;
+import com.food.model.amount_money;
+import com.food.model.billing_address;
+import com.food.model.shipping_address;
 import com.food.response.Response;
 import com.food.response.SimpleResponse;
 import com.food.service.CartService;
 import com.food.util.ServiceUtil;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
 
 import net.authorize.Environment;
 import net.authorize.api.contract.v1.CreateTransactionRequest;
@@ -48,6 +65,8 @@ import net.authorize.api.controller.base.ApiOperationBase;
 @RequestMapping("/ffc/services/cart")
 public class CartServiceImpl implements CartService {
 
+	private  UUID idKey = null;
+	private com.fasterxml.jackson.databind.ObjectMapper jacksonObjectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
 	
 	@Override
 	@RequestMapping(value="/addToCart" ,method = RequestMethod.POST)
@@ -77,9 +96,15 @@ public class CartServiceImpl implements CartService {
 		queryParams.put("itemId", request.getCart_data().getItemId());
 		queryParams.put("userId", request.getCart_data().getUserId());
 		queryParams.put("qty", request.getCart_data().getQty());
+		queryParams.put("orderType", request.getCart_data().getOrderType());
 		
 		boolean insertFlag ;
-		insertFlag = dao.insertUpdateObject(entityName, queryParams);
+		try{
+			insertFlag = dao.insertUpdateObject(entityName, queryParams);
+		} catch(Exception e) {
+			insertFlag = false;
+		}
+		
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("status", insertFlag);
@@ -105,8 +130,9 @@ public class CartServiceImpl implements CartService {
 		
 		Map<String, String> queryParams = new HashMap<String, String>();
 		queryParams.put("userId", request.getCart_data().getUserId());
-		queryParams.put("cartId", request.getCart_data().getCartId());		
-		String entityName = "GET_TOTAL_AMT";
+		queryParams.put("cartId", request.getCart_data().getCartId());	
+		Map<String,Object> result = new HashMap<String,Object>();
+		/*String entityName = "GET_TOTAL_AMT";
 		List<Object> readObject = null;		
 		readObject = dao.readObjects(entityName, queryParams);		
 		String totalAmt = ((Map)readObject.get(0)).get("totalAmt").toString();
@@ -128,7 +154,7 @@ public class CartServiceImpl implements CartService {
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("totalAmt", Double.parseDouble(totalAmt));
 		result.put("tax", tax);
-		result.put("netAmount", netAmount);
+		result.put("netAmount", netAmount);*/
 		
 		Map<String, String> queryItemParams = new HashMap<String, String>();
 		queryItemParams.put("cartId", request.getCart_data().getCartId());
@@ -164,6 +190,31 @@ public class CartServiceImpl implements CartService {
 		
 	}
 	
+	
+	@RequestMapping(value="/deleteItem" ,method = RequestMethod.POST)
+	public ResponseEntity<Response> deleteItem(@RequestBody  RequestData request) {
+		
+		DaoFactory factory = DaoFactory.getDaoFactory();
+		ObjectDao dao = factory.getObjectDao();
+		
+		Map<String, String> queryParams = new HashMap<String, String>();
+		queryParams.put("userId", request.getCart_data().getUserId());
+		queryParams.put("cartId", request.getCart_data().getCartId());		
+		queryParams.put("itemId", request.getCart_data().getItemId());
+		String entityName = "DELETE_CART_ITEM";
+		boolean itemDeleted = false;		
+		itemDeleted = dao.insertUpdateObject(entityName, queryParams);	
+		System.out.println("item deleted : " + itemDeleted);
+		SimpleResponse reponse = new SimpleResponse("" + itemDeleted,
+				request.getRequest_data_type(),
+				request.getRequest_data_method(), itemDeleted);
+		ResponseEntity<Response> entity = new ResponseEntity<Response>(reponse,
+				HttpStatus.OK);
+		
+		return entity;
+	}
+		
+		
 	@RequestMapping(value="/previewMenu" ,method = RequestMethod.POST)
 	public ResponseEntity<Response> previewMenu(@RequestBody  RequestData request) {
 		
@@ -297,6 +348,216 @@ public class CartServiceImpl implements CartService {
 		return entity;
 	}
 
+	
+	@Override
+	@RequestMapping(value = "/listSquareLocation", method = RequestMethod.POST)
+	public ResponseEntity<Response> listSquareLocation(@RequestBody RequestData request) {
+
+		HttpResponse<JsonNode> jsonResponse = null;
+		String access_token = "sq0atp-V15-WBE-TEyO-a_c0Ha7CQ";
+		try {
+			jsonResponse = Unirest.get("https://connect.squareup.com/v2/locations")
+					.header("Authorization", "Bearer " + access_token)
+					.asJson();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("location respones " + completed(jsonResponse));
+		SimpleResponse reponse = new SimpleResponse("" + true,
+				request.getRequest_data_type(),
+				request.getRequest_data_method(), completed(jsonResponse));
+		
+		ResponseEntity<Response> entity = new ResponseEntity<Response>(reponse,
+				HttpStatus.OK);	
+		return entity;
+	}
+	
+	public String completed(HttpResponse<JsonNode> response) {
+        int code = response.getStatus();
+        Map<String, List<String>> headers = response.getHeaders();
+        JsonNode body = response.getBody();
+        InputStream rawBody = response.getRawBody();
+        return getStringFromInputStream(rawBody);
+   }
+	
+	// convert InputStream to String
+		private static String getStringFromInputStream(InputStream is) {
+
+			BufferedReader br = null;
+			StringBuilder sb = new StringBuilder();
+
+			String line;
+			try {
+
+				br = new BufferedReader(new InputStreamReader(is));
+				while ((line = br.readLine()) != null) {
+					sb.append(line);
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				if (br != null) {
+					try {
+						br.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
+			return sb.toString();
+
+		}
+		
+		
+	  
+	@Override
+	@RequestMapping(value = "/createCustomer", method = RequestMethod.POST)
+	public ResponseEntity<Response> createCustomer(@RequestBody RequestData request) {
+		HttpResponse<String> jsonResponse = null;
+		String access_token = "sq0atp-V15-WBE-TEyO-a_c0Ha7CQ";
+		Map<String, Object> reqMap = new HashMap();
+		shipping_address ship = new shipping_address();
+		shipping_address shipData = (shipping_address)request.getCart_data().getShipping_address();
+		ship.setAddress_line_1(shipData.getAddress_line_1());
+		ship.setAddress_line_2(shipData.getAddress_line_2());
+		ship.setLocality(shipData.getLocality());
+		ship.setAdministrative_district_level_1(shipData.getAdministrative_district_level_1());
+		ship.setPostal_code(shipData.getPostal_code());
+		ship.setCountry(shipData.getCountry());
+		
+		reqMap.put("given_name", request.getCart_data().getShiptoFirstName());
+		reqMap.put("family_name", request.getCart_data().getShiptoLastName());
+		reqMap.put("email_address", request.getCart_data().getEmailAddress());
+		reqMap.put("phone_number", request.getCart_data().getPhoneNo());
+		reqMap.put("reference_id", request.getCart_data().getDescription());
+		reqMap.put("note", request.getCart_data().getNote());
+		reqMap.put("address", ship);
+		
+		System.out.println("request string " + reqMap.toString());
+		
+		try {
+			
+			jsonResponse = Unirest.post("https://connect.squareup.com/v2/customers")
+					.header("Authorization", "Bearer " + access_token)
+					.body(jacksonObjectMapper.writeValueAsString(reqMap))
+					.asString();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		SimpleResponse reponse = new SimpleResponse("" + true,
+				request.getRequest_data_type(),
+				request.getRequest_data_method(), jsonResponse.getBody());
+		
+		ResponseEntity<Response> entity = new ResponseEntity<Response>(reponse,
+				HttpStatus.OK);	
+		return entity;
+		
+	}
+	
+	// square personal access token : sq0atp-V15-WBE-TEyO-a_c0Ha7CQ
+	// square sandbox application id : sandbox-sq0idp-JAj21eCv6q4s9kLqY9dWxA
+	// square sandbox access token : sq0atb-xHgAtmv5Ij4fDZHDaaK1yA
+	@Override
+	@RequestMapping(value="/chargeCreditCardWithSquare" ,method = RequestMethod.POST)
+	public ResponseEntity<Response> chargeCreditCardWithSquare(@RequestBody  RequestData request){
+		idKey =  UUID.randomUUID();
+		Map<String, Object> reqMap = new HashMap();
+		HttpResponse<String> jsonResponse = null;
+		String access_token = "sq0atp-V15-WBE-TEyO-a_c0Ha7CQ";
+		
+		System.out.println("ID " + request.getCart_data().getUserPaymentId());
+		shipping_address ship = new shipping_address();
+		
+		shipping_address shipData = (shipping_address)request.getCart_data().getShipping_address();
+		ship.setAddress_line_1(shipData.getAddress_line_1());
+		ship.setAddress_line_2(shipData.getAddress_line_2());
+		ship.setLocality(shipData.getLocality());
+		ship.setAdministrative_district_level_1(shipData.getAdministrative_district_level_1());
+		ship.setPostal_code(shipData.getPostal_code());
+		ship.setCountry(shipData.getCountry());
+				
+		reqMap.put("idempotency_key", idKey);
+		reqMap.put("shipping_address", ship);
+		
+		
+		billing_address billTo = new billing_address();
+		billing_address billToData = (billing_address)request.getCart_data().getBilling_address();
+		
+		billTo.setAddress_line_1(billToData.getAddress_line_1());
+		billTo.setAddress_line_2(billToData.getAddress_line_2());
+		billTo.setAdministrative_district_level_1(billToData.getAdministrative_district_level_1());
+		billTo.setLocality(billToData.getLocality());
+		billTo.setPostal_code(billToData.getPostal_code());
+		billTo.setCountry(billToData.getCountry());
+		
+		reqMap.put("billing_address", billTo);
+		
+		amount_money amt = new amount_money();		
+		amount_money amtData = (amount_money)request.getCart_data().getAmount_money();
+		
+		amt.setAmount(amtData.getAmount());
+		amt.setCurrency(amtData.getCurrency());
+		
+		reqMap.put("amount_money", amt);
+		//reqMap.put("card_nonce", request.getCart_data().getUserPaymentId());
+		reqMap.put("customer_card_id",request.getCart_data().getCustomerCardId());
+		reqMap.put("customer_id",request.getCart_data().getCustomerId());
+		reqMap.put("reference_id", request.getCart_data().getDescription());
+		reqMap.put("note", request.getCart_data().getNote());
+		reqMap.put("delay_capture", false);
+		System.out.println("request string " + reqMap.toString());
+		
+		
+		
+		/*public <T> T readValue(String value, Class<T> valueType) {
+	        try {
+	            return jacksonObjectMapper.readValue(value, valueType);
+	        } catch (IOException e) {
+	            throw new RuntimeException(e);
+	        }
+	    }
+
+	    public String writeValue(Object value) {
+	        try {
+	            return jacksonObjectMapper.writeValueAsString(value);
+	        } catch (JsonProcessingException e) {
+	            throw new RuntimeException(e);
+	        }
+	    }*/
+	    
+		try{
+			jsonResponse = Unirest.post("https://connect.squareup.com/v2/locations/EBAT9F9VFA3M9/transactions")
+					  .header("Authorization", "Bearer " + access_token)
+					  .body(jacksonObjectMapper.writeValueAsString(reqMap))
+					  .asString();
+					  
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+        Map<String,Object> returnResult = new HashMap<String,Object>();
+        returnResult.put("id", jsonResponse.getBody());
+        System.out.println("response " + jsonResponse.getBody());
+        SimpleResponse reponse = new SimpleResponse("" + true,
+				request.getRequest_data_type(),
+				request.getRequest_data_method(), returnResult);
+		
+		ResponseEntity<Response> entity = new ResponseEntity<Response>(reponse,
+				HttpStatus.OK);
+		
+		return entity;
+		
+    }
+	
+	
+	
+	
 	@Override
 	@RequestMapping(value="/chargeCreditCard" ,method = RequestMethod.POST)
 	public ResponseEntity<Response> chargeCreditCard(@RequestBody  RequestData request) {
@@ -343,6 +604,13 @@ public class CartServiceImpl implements CartService {
                     System.out.println("Successful Credit Card Transaction");
                     System.out.println(result.getAuthCode());
                     System.out.println(result.getTransId());
+                    try{
+                    	String orderNum = insertOrder(request);
+                    	returnResult.put("orderNum", orderNum);
+                    } catch(Exception e){
+                    	e.printStackTrace();
+                    }
+                    
                 }
                 else
                 {
@@ -365,6 +633,54 @@ public class CartServiceImpl implements CartService {
 		
 		return entity;
 		
+    }
+	
+	public String insertOrder(@RequestBody  RequestData request) throws Exception{
+		
+		DaoFactory factory = DaoFactory.getDaoFactory();
+		ObjectDao dao = factory.getObjectDao();
+		
+		Map<String, String> queryParams = new HashMap<String, String>();
+		queryParams.put("userId", request.getCart_data().getUserId());
+		
+		String entityName = "SUBMIT_ORDER";
+		String orderNum = createOrderNumber(new Date());
+		queryParams.clear();
+		queryParams.put("orderId", orderNum);
+		queryParams.put("cartId", request.getCart_data().getCartId());
+		queryParams.put("userId", request.getCart_data().getUserId());
+		queryParams.put("orderDate", request.getCart_data().getOrderDate());
+		queryParams.put("userPaymentId", request.getCart_data().getUserPaymentId());
+		queryParams.put("itemId", request.getCart_data().getItemId());
+		queryParams.put("quantity", request.getCart_data().getQty());
+		queryParams.put("amount", request.getCart_data().getAmount());
+		queryParams.put("netAmount", request.getCart_data().getNetAmount());
+		queryParams.put("shiptoFirstName", request.getCart_data().getShiptoFirstName());
+		queryParams.put("shiptoMiddlName", request.getCart_data().getShiptoMiddlName());
+		queryParams.put("shiptoLastName", request.getCart_data().getShiptoLastName());
+		queryParams.put("shiptoAddress1", request.getCart_data().getShiptoAddress1());
+		queryParams.put("shiptoAddress2", request.getCart_data().getShiptoAddress2());
+		queryParams.put("shiptoCity", request.getCart_data().getShiptoCity());
+		queryParams.put("shiptoState", request.getCart_data().getShiptoState());
+		queryParams.put("shiptoZipCode", request.getCart_data().getShiptoZipCode());
+		queryParams.put("discountPercentage", request.getCart_data().getDiscountPercentage());
+		
+		
+		boolean insertFlag ;
+		insertFlag = dao.insertUpdateObject(entityName, queryParams);
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("status", insertFlag);		
+		if (insertFlag == true) {
+			return orderNum;
+		} else 
+			return "error in inserting order details";
+		
+	}
+
+	public static String createOrderNumber(Date orderDate) throws NoSuchAlgorithmException {
+        DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+        return df.format(orderDate).toString();
     }
 	
 }

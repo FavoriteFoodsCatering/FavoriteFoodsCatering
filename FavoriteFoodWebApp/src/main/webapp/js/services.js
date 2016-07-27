@@ -70,7 +70,7 @@ angular.module('ffcWebApp.services', ['ffcWebApp.config'])
         });
     };
 	
-	menuItemService.addItem = function(userId,itemId,qty) {
+	menuItemService.addItem = function(userId,itemId,orderType) {
        
         return $http({
             url: ENV.apiUrl + 'cart/addToCart',
@@ -84,7 +84,8 @@ angular.module('ffcWebApp.services', ['ffcWebApp.config'])
                  "cart_data": {
 				        	"userId":userId,
                             "itemId":itemId,
-                            "qty":"1"
+                            "qty":"1",
+                            "orderType":orderType
 				 }
             }
         }).then(function(response) {
@@ -209,6 +210,48 @@ angular.module('ffcWebApp.services', ['ffcWebApp.config'])
     };
  
  
+    checkOutService.deleteItem = function(userId, cartId, itemId) {
+ 	   return $http({
+ 		   url : ENV.apiUrl + 'cart/deleteItem' ,
+ 		   method : 'POST' ,
+ 		   headers : {
+ 			   'Content-Type':'application/json'
+ 		   },
+ 		   data:{
+ 			   "request_data_type":"",
+ 			   "request_data_method":"",
+ 			   "cart_data":{
+ 				   "userId" : userId,
+ 				   "cartId" : cartId,
+ 				   "itemId" : itemId
+ 			   }
+ 		   }
+ 	   }).then(function(response) {
+ 		   return response;
+ 	   });
+    };
+    
+    checkOutService.submitOrder = function(paymentId, expDate, netAmt) {
+  	   return $http({
+  		   url : ENV.apiUrl + 'cart/chargeCreditCard' ,
+  		   method : 'POST' ,
+  		   headers : {
+  			   'Content-Type':'application/json'
+  		   },
+  		   data:{
+  			   "request_data_type":"",
+  			   "request_data_method":"",
+  			   "cart_data":{
+  				   "userPaymentId" : paymentId,
+  				   "expDate" : expDate,
+  				   "netAmount" : netAmt
+  			   }
+  		   }
+  	   }).then(function(response) {
+  		   return response;
+  	   });
+     };
+     
   return checkOutService;
 })
 
@@ -240,6 +283,27 @@ angular.module('ffcWebApp.services', ['ffcWebApp.config'])
            console.log("Response  Checkout :" + response.data.request_data_result);
            return response;
        });
+   };
+   
+   orderService.deleteItem = function(userId, cartId, itemId) {
+	   return $http({
+		   url : ENV.apiUrl + 'cart/deleteItem' ,
+		   method : 'POST' ,
+		   headers : {
+			   'Content-Type':'application/json'
+		   },
+		   data:{
+			   "request_data_type":"",
+			   "request_data_method":"",
+			   "cart_data":{
+				   "userId" : userId,
+				   "cartId" : cartId,
+				   "itemId" : itemId
+			   }
+		   }
+	   }).then(function(response) {
+		   return response;
+	   });
    };
  
  

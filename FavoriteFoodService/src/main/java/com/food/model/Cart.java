@@ -21,6 +21,7 @@ public class Cart {
 	private String userPaymentId;
 	private String expDate;
 	private String amount;
+	private String currency;
 	private String netAmount;
 	private String shiptoFirstName;
 	private String shiptoMiddlName;
@@ -30,9 +31,31 @@ public class Cart {
 	private String shiptoCity;
 	private String shiptoState;
 	private String shiptoZipCode;
+	private String shiptoCountry;
 	private String discountPercentage;
 	private String updateTime;
 	private String numPpl;
+	private String orderType;
+	private String emailAddress;
+	private String phoneNo;
+	
+	
+	private String billtoFirstName;
+	private String billtoMiddlName;
+	private String billtoLastName;
+	private String billtoAddress1;
+	private String billtoAddress2;
+	private String billtocity;
+	private String billtostate;
+	private String billtozipCode;
+	private String billtoCountry;
+	private String note;
+	private String customerId;
+	private String customerCardId;
+	
+	private shipping_address shipping_address;
+	private billing_address billing_address;
+	private amount_money amount_money;
 	
 	public String getCartId() {
 		return cartId;
@@ -177,6 +200,126 @@ public class Cart {
 	}
 	public void setNumPpl(String numPpl) {
 		this.numPpl = numPpl;
+	}
+	public String getOrderType() {
+		return orderType;
+	}
+	public void setOrderType(String orderType) {
+		this.orderType = orderType;
+	}
+	public String getShiptoCountry() {
+		return shiptoCountry;
+	}
+	public void setShiptoCountry(String shiptoCountry) {
+		this.shiptoCountry = shiptoCountry;
+	}
+	public String getBilltoFirstName() {
+		return billtoFirstName;
+	}
+	public void setBilltoFirstName(String billtoFirstName) {
+		this.billtoFirstName = billtoFirstName;
+	}
+	public String getBilltoMiddlName() {
+		return billtoMiddlName;
+	}
+	public void setBilltoMiddlName(String billtoMiddlName) {
+		this.billtoMiddlName = billtoMiddlName;
+	}
+	public String getBilltoLastName() {
+		return billtoLastName;
+	}
+	public void setBilltoLastName(String billtoLastName) {
+		this.billtoLastName = billtoLastName;
+	}
+	public String getBilltoAddress1() {
+		return billtoAddress1;
+	}
+	public void setBilltoAddress1(String billtoAddress1) {
+		this.billtoAddress1 = billtoAddress1;
+	}
+	public String getBilltoAddress2() {
+		return billtoAddress2;
+	}
+	public void setBilltoAddress2(String billtoAddress2) {
+		this.billtoAddress2 = billtoAddress2;
+	}
+	public String getBilltocity() {
+		return billtocity;
+	}
+	public void setBilltocity(String billtocity) {
+		this.billtocity = billtocity;
+	}
+	public String getBilltostate() {
+		return billtostate;
+	}
+	public void setBilltostate(String billtostate) {
+		this.billtostate = billtostate;
+	}
+	public String getBilltozipCode() {
+		return billtozipCode;
+	}
+	public void setBilltozipCode(String billtozipCode) {
+		this.billtozipCode = billtozipCode;
+	}
+	public String getBilltoCountry() {
+		return billtoCountry;
+	}
+	public void setBilltoCountry(String billtoCountry) {
+		this.billtoCountry = billtoCountry;
+	}
+	public String getCurrency() {
+		return currency;
+	}
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+	public String getNote() {
+		return note;
+	}
+	public void setNote(String note) {
+		this.note = note;
+	}
+	public shipping_address getShipping_address() {
+		return shipping_address;
+	}
+	public void setShipping_address(shipping_address shipping_address) {
+		this.shipping_address = shipping_address;
+	}
+	public billing_address getBilling_address() {
+		return billing_address;
+	}
+	public void setBilling_address(billing_address billing_address) {
+		this.billing_address = billing_address;
+	}
+	public amount_money getAmount_money() {
+		return amount_money;
+	}
+	public void setAmount_money(amount_money amount_money) {
+		this.amount_money = amount_money;
+	}
+	public String getCustomerId() {
+		return customerId;
+	}
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
+	}
+	public String getCustomerCardId() {
+		return customerCardId;
+	}
+	public void setCustomerCardId(String customerCardId) {
+		this.customerCardId = customerCardId;
+	}
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
+	}
+	public String getPhoneNo() {
+		return phoneNo;
+	}
+	public void setPhoneNo(String phoneNo) {
+		this.phoneNo = phoneNo;
 	}
 	
 

@@ -4,25 +4,28 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
 <script>
-		
+
 </script>
+
+
 </head>
 <body>
 
 <section class="content pad1" style="min-height:550px;">
+
     <div class="container">
       <div class="row">
 			<p align="center">
 				<font color=red style="font-weight: bold">Catering available
 					Monday to Saturday</font>
 			</p>
-			<div >
-					<p><input id="bulkOrder" type="radio" name="orderType" value="bulkOrder" /><label for="first">Bulk Order</label></p>
+			<div>
+					<p><input type="radio" name="orderType" value="cater" ng-model="orderType" ng-change="setSelectedType(orderType)" /><label for="first">Bulk Order</label></p>
 					<p>Food is served family style. The minimum order is $250.00</p>
 					<p>The catered meal is offered at the promotional rate of $20.00
 						Per Person + Sales Tax (FREE delivery)</p>
 					<p>Choose up to 3 entrees / 2 sides / 2 appetizers/desserts.</p>
-					<input id="lunchBox" type="radio" name="orderType" value="lunchBox" /><label for="first">Lunch Box</label>
+					<input  type="radio" name="orderType" value="box" ng-model="orderType" ng-change="setSelectedType(orderType)" /><label for="first">Lunch Box</label>
 					<p>for working lunch meetings, consider lunch boxes consisting of 1 sandwich, 2 small sides, and 1 cookie. This lighter fare is offered at the promotional rate of $13.00 per person:</p>
 					<p>Hit the check box to select this lunch box item.
 						Select up to 3 different kinds of sandwiches.
@@ -49,7 +52,7 @@
 	                        {{menu.itemDesc}} 
 	                        <br>
 	                        <a href="#" class="btn"><i class="fa fa-heart"></i></a>
-	                        <a href="" ng-click="addItem(menu.itemId,menu.rate)" class="btn"> <i class="fa fa-shopping-cart" ></i></a>
+	                        <a href="" ng-click="addItem(menu.itemId)" class="btn"> <i class="fa fa-shopping-cart" ></i></a>
 	                        <span class="pull-right price">$ {{menu.rate}}</span>
 	                      </div>
 	                    </div>
@@ -67,6 +70,7 @@
       </div>
       
     </div>
+    
   </section>
  	<div class="clear sep__1"></div>
  </body>

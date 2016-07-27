@@ -1,61 +1,103 @@
+
+<!-- Latest compiled and minified CSS -->
+
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<meta name="google-signin-client_id"
+	content="1081708230862-m8i7oh49lk0p35kcccgest9sthri79nt.apps.googleusercontent.com">
 <body>
-  <!--==============================
+	<!--==============================
   header
   =================================-->
-  <header>
-    <!--==============================
+	<header>
+		<!--==============================
     Zip code popup
     =================================-->
-    <div id="boxes">
-      <div style="top: 25% !important; left: 30% !important; display: none;" id="dialog" class="window">
-        <h2>FAVORITE FOOD CATERTING</h2>
-        <hr class="dividerline"/>
-        <h4>Fresh ingredients. Daily menus.<br/>No commitment. No fuss.</h4>
-        <div id="popupfoot">
-          <div class="note">Enter Your ZIP Code to View Our Menu</div>
-          <input name="ZipCode" id="zipCode" placeHolder="ZipCode" type="text" data-constraints="@NotEmpty @Required @ZipCode">
-          <a href="#" class="zipbtn" id="zip" data-type="submit">See Menu</a>
-        </div>
-      </div>
-      <div style="width: 1478px; font-size: 32pt; color:white; background-color:white; height: 602px; display: none; opacity: 0.7;" id="mask"></div>
-    </div>
-    <!--==============================
+		<div id="boxes">
+			<div
+				style="top: 25% !important; left: 30% !important; display: none;"
+				id="dialog" class="window">
+				<h2>FAVORITE FOOD CATERTING</h2>
+				<hr class="dividerline" />
+				<h4>
+					Fresh ingredients. Daily menus.<br />No commitment. No fuss.
+				</h4>
+				<div id="popupfoot">
+					<div class="note">Enter Your ZIP Code to View Our Menu</div>
+					<input name="ZipCode" id="zipCode" placeHolder="ZipCode"
+						type="text" data-constraints="@NotEmpty @Required @ZipCode">
+					<a href="#" class="zipbtn" id="zip" data-type="submit">See Menu</a>
+				</div>
+			</div>
+			<div
+				style="width: 1478px; font-size: 32pt; color: white; background-color: white; height: 602px; display: none; opacity: 0.7;"
+				id="mask"></div>
+		</div>
+		<!--==============================
     Stuck menu
     =================================-->
-    <section id="stuck_container">
-      <div class="container">
-        <div class="row">
-          <div class="grid_12">
-            <h1>
-              <a href="index.html">
-                <img src="images/logo.png" alt="Logo alt">
-              </a>
-            </h1>
-            <div class="toploginlinks">
-              <ul>
-                <!-- <li><a href="#" id="location"><i class="fa fa-location-arrow"></i></a></li>
+		<section id="stuck_container">
+			<div class="container">
+				<div class="row">
+					<div class="grid_12">
+						<h1>
+							<a href="index.html"> <img src="images/logo.png"
+								alt="Logo alt">
+							</a>
+						</h1>
+						<div class="toploginlinks">
+							<ul>
+								<!-- <li><a href="#" id="location"><i class="fa fa-location-arrow"></i></a></li>
                 <li><a href="#"><i class="fa fa-calendar"></i></a></li> -->
-                <!-- <li><a href="#"><i class="fa fa-sign-in"></i></a></li>
+								<!-- <li><a href="#"><i class="fa fa-sign-in"></i></a></li>
                 <li><a href="#"><i class="fa fa-pencil-square"></i></a></li> -->
-                <li><a href="#/orders"><i class="fa fa-shopping-cart"> <font color="red" size="2">{{cartSize}}</font></i></a> </li>
-              </ul>
-            </div>
+								<li><a href="#/orders"><i class="fa fa-shopping-cart">
+											<font color="red" size="2">{{cartSize}}</font>
+									</i></a></li>
+								<li class="dropdown"
+									style="font-size: 15px; padding: 10px 18px;"><a href="#"
+									class=" dropdown dropdown-toggle" id="logindropdown"
+									data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
 
-            <div class="navigation ">
-              <nav>
-                <ul class="sf-menu">
-                  <!-- <li><a href="index.html">home</a></li> -->
-                  <li class="current"><a href="#/">Menu</a></li>
-                  <li><a href="#/orders">Orders</a></li>
-                  <li><a href="#/testimonials">Reviews</a></li>
-                  <li><a href="#/contacts">Contacts</a></li>
-                </ul>
-              </nav>
-              <div class="clear"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </header>
-  </body>
+									<ul class="dropdown-menu" role="menu"
+										aria-labelledby="dropdownMenu">
+
+										<li class="fb-login-button" autologoutlink="true"
+											data-show-faces="false" data-width="200" data-max-rows="2"
+											size="medium"></li>
+
+										<li><a tabindex="-1" href="#"
+											class="btn btn-tw g-signin2" data-onsuccess="onSignIn"> <i
+												class="fa fa-google "></i> Google
+										</a></li>
+
+									</ul></li>
+
+								<li id="showaftergoglelogin"><a href="#"
+									onclick="signOut();">Sign out</a></li>
+
+
+							</ul>
+						</div>
+
+						<div class="navigation ">
+							<nav>
+
+								<ul class="sf-menu nav navbar-nav navbar-right" id="user">
+									<!-- <li><a href="index.html">home</a></li> -->
+									<li class="current"><a href="#/">Menu</a></li>
+									<li><a href="#/orders">Orders</a></li>
+									<li><a href="#/testimonials">Reviews</a></li>
+									<li><a href="#/contacts">Contacts</a></li>
+
+
+
+								</ul>
+							</nav>
+							<div class="clear"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</header>
+</body>

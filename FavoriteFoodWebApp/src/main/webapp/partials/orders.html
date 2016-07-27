@@ -13,7 +13,7 @@
   <section class="content">
     <div class="container">
       <div class="row">
-        <div class="grid_8">
+        <div class="grid_8" ng-controller="OrderCtrl">
            <div ng-hide="coresults.itemsObj.length === 0">
            	<h2>( No items in this list yet! )</h2>
            	$('#addDiv').hide();
@@ -23,8 +23,8 @@
           <div class="extra_wrapper">
             <img src="{{cart.imageUrl}}" alt="" class="img_inner fleft inn__1">
             <div class="text1 tx__1">
-              <a href="#">{{cart.itemName}} </a>
-              <a href="#" class="icon_size pull-right"><i class="fa fa-trash-o"></i></a>              
+              <a href="">{{cart.itemName}} </a>
+              <a href="" ng-click="deleteItem(cart.itemId);" class="icon_size pull-right"><i class="fa fa-trash-o"></i></a>              
             </div>
             <p>{{cart.description}}</p>
           </div>

@@ -5,7 +5,7 @@
 <title>Checkout</title>
 <script>
 
-	
+<script type="text/javascript" src="https://js.squareup.com/v2/paymentform"></script>
 
 </script>
 </head>
@@ -39,7 +39,7 @@
 					<td><a href="">Change</a></td>
 				</tr>				
 				<!-- <tr style="border-bottom: inset;"><h2>Your Orders</h2></tr> -->
-				<div class="grid_8">
+				<div class="grid_8"  ng-controller="OrderCtrl">
 				<tr>
 					<h2>Your Orders</h2>
 				    <td><h3>3</h3></td>
@@ -50,7 +50,7 @@
 				            <img src="{{cart.imageUrl}}" alt="" class="img_inner fleft inn__1">
 				            <div class="text1 tx__1">
 				              <a href="#">{{cart.itemName}} </a>
-				              <a href="#" class="icon_size pull-right"><i class="fa fa-trash-o"></i></a>              
+				              <a href="" ng-click="deleteItem(cart.itemId);" class="icon_size pull-right"><i class="fa fa-trash-o"></i></a>              
 				            </div>
 				            <p>{{cart.description}}</p>
 				          </div>
@@ -61,8 +61,8 @@
 				</div>
 				</table>
 			</div>
-			<div class="grid_4">
-			<a type="button" class="buttonC">Place your Order</a>
+			<div class="grid_4" ng-controller="CheckOutCtrl">
+			<input type="button" value="Place your Order" ng-click="submitOrder(orderRes.cardNo, orderRes.cardExp, orderRes.netAmount)" />
           	<div class="form_title color1">
           	<span>By placing your order, you agree to Favourite Foods Catering's privacy notice and conditions of use.</span>
           	<h3>Order Summary</h3>

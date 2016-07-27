@@ -12,5 +12,8 @@ public interface CartService {
 	public ResponseEntity<Response> submitOrder(RequestData request);
 	public ResponseEntity<Response> previewMenu(RequestData request);
 	public ResponseEntity<Response> chargeCreditCard(RequestData request);
+	public ResponseEntity<Response> chargeCreditCardWithSquare(RequestData request);
+	public ResponseEntity<Response> listSquareLocation(RequestData request);
+	public ResponseEntity<Response> createCustomer(RequestData request);
 
 }
