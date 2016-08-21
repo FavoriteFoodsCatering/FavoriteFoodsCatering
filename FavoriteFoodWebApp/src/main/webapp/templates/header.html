@@ -53,29 +53,30 @@
 								<li><a href="#/orders"><i class="fa fa-shopping-cart">
 											<font color="red" size="2">{{cartSize}}</font>
 									</i></a></li>
-								<li class="dropdown"
-									style="font-size: 15px; padding: 10px 18px;"><a href="#"
+								<li class="dropdown"><a href="#"
 									class=" dropdown dropdown-toggle" id="logindropdown"
 									data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
 
 									<ul class="dropdown-menu" role="menu"
 										aria-labelledby="dropdownMenu">
 
-										<li class="fb-login-button" autologoutlink="true"
-											data-show-faces="false" data-width="200" data-max-rows="2"
-											size="medium"></li>
+										
+<!-- 										<li><a href="#" class="fb-login-button" -->
+<!-- 											autologoutlink="true" data-show-faces="false" -->
+<!-- 												data-width="200" data-max-rows="2"size="medium"> </a></li> -->
 
+										<li><fb:login-button autologoutlink="true" scope="public_profile,email"
+												onlogin="checkLoginState();"><i class="fa fa-facebook" aria-hidden="true"></i>
+											</fb:login-button></li>
 										<li><a tabindex="-1" href="#"
 											class="btn btn-tw g-signin2" data-onsuccess="onSignIn"> <i
 												class="fa fa-google "></i> Google
-										</a></li>
+										</a>
+										
 
-									</ul></li>
-
-								<li id="showaftergoglelogin"><a href="#"
-									onclick="signOut();">Sign out</a></li>
-
-
+									</ul>
+									</li>
+									<a href="#" onclick="signOut();">Sign out</a>
 							</ul>
 						</div>
 
