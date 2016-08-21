@@ -45,19 +45,6 @@ $(document).ready(function() {
 						//$('#zipCode').val('');
 				}
     });
-
-	//if close button is clicked
-	// $('.window .close').click(function (e) {
-	// 	//Cancel the link behavior
-	// 	e.preventDefault();
-	// 	$('#mask').hide();
-	// 	$('.window').hide();
-	// });
-	// //if mask is clicked
-	// $('#mask').click(function () {
-	// 	$(this).hide();
-	// 	$('.window').hide();
-	// });
 });
 
 function saveZipToSession(zipCode){
@@ -79,70 +66,13 @@ function onSignIn(googleUser) {
 	 
 	}
 
-//function UserName(){
-//	console.log('userName function called. Changing innerHTML');
-//	document.getElementById("user").innerHTML=name;
-//}
-
 function signOut() {
-	
-  var auth2 = gapi.auth2.getAuthInstance();
-  auth2.signOut().then(function () {
-    console.log('User signed out.');
-    document.getElementById('showaftergoglelogin').style.display="hidden";
-
-    
-  });
-}
-
-// This is called with the results from from FB.getLoginStatus().
-function statusChangeCallback(response) {
-  console.log('statusChangeCallback');
-  console.log(response);
-  if (response.status === 'connected') {
-    // Logged into your app and Facebook
-	  changeLoginText();
-  } else if (response.status === 'not_authorized') {
-    // The person is logged into Facebook, but not your app.
-    document.getElementById('status').innerHTML = 'Please log ' +
-      'into this app.';
-  } else {
-    // The person is not logged into Facebook, so we're not sure if
-    // they are logged into this app or not.
-    document.getElementById('status').innerHTML = 'Please log ' +
-      'into Facebook.';
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
   }
-}
 
-function checkLoginState() {
-  FB.getLoginStatus(function(response) {
-    statusChangeCallback(response);
-  });
-}
-
-window.fbAsyncInit = function() {
-FB.init({
-  appId      : '1750941051843718',
-  cookie     : true,  // enable cookies to allow the server to access 
-                      // the session
-  xfbml      : true,  // parse social plugins on this page
-  version    : 'v2.5' // use graph api version 2.5
-});
-
-
-FB.getLoginStatus(function(response) {
-  statusChangeCallback(response);
-});
-
-};
-//Load the SDK asynchronously
-(function(d, s, id) {
-	  var js, fjs = d.getElementsByTagName(s)[0];
-	  if (d.getElementById(id)) return;
-	  js = d.createElement(s); js.id = id;
-	  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=1750941051843718";
-	  fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));
 
 function changeLoginText() {
     console.log('change logintext function called ')
@@ -153,20 +83,59 @@ document.getElementById('hidetext').style.display = "none";
 //document.getElementById('showafterlogin').style.display="visible";
     }
 
-FB.logout(function(response) {
-	  // user is now logged out
-	});
+function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
+
+    if (response.status === 'connected') {
+      testAPI();
+    } else if (response.status === 'not_authorized') {
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+    } else {
+      
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into Facebook.';
+    }
+  }
+
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
+  window.fbAsyncInit = function() {
+  FB.init({
+    appId      : 1811588739076937,
+    cookie     : true,  // enable cookies to allow the server to access 
+                        // the session
+    xfbml      : true,  // parse social plugins on this page
+    version    : 'v2.5' // use graph api version 2.5
+  });
+
+
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=1811588739076937"
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
   
-//function(response) {
-//	if(response.status === 'connected'){
-//		console.log('change logintext  response status function called '),
-//		 document.getElementById('changetextlogin').innerHTML = "Logout from";
-//		 document.getElementById('status1').innerHTML="was confirmed";
-//		 //document.getElementById('status').style.display = "none";
-//
-//
-//	}
-
-//hide login and show name of user and display logout after sign in
-
-
+  
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+      document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+    });
+  }
