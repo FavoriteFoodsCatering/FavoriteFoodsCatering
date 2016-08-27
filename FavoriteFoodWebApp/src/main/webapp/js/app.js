@@ -7,7 +7,7 @@
  * Main AngularJS Web Application
  */
 var app=angular.module('ffcWebApp', [
-	'ngRoute','ffcWebApp.services'
+	'ngRoute', 'ngFacebook', 'googleplus', 'ffcWebApp.services'
 ]).service('sharedProperties', function () {
     var uniEdit = 0;
 
@@ -20,7 +20,9 @@ var app=angular.module('ffcWebApp', [
         }
     };
 });
+  
 
+  
 /**
  * Configure the Routes
  */
@@ -34,6 +36,33 @@ app.config(['$routeProvider', function ($routeProvider) {
     .when("/reviewOrder", { templateUrl: "partials/checkout.html", controller: "OrderCtrl"})
     .otherwise("/404", {templateUrl: "partials/404.html", controller: "PageCtrl"});
 }]);
+
+
+app.config(function($facebookProvider, $routeProvider) {
+    $facebookProvider.setAppId('1811588739076937');
+});
+
+app.config(['GooglePlusProvider', function(GooglePlusProvider) {
+    GooglePlusProvider.init({
+        clientId: '316428149214-peqajmbm5idn9d4peo1j1ue2jm6i00cu.apps.googleusercontent.com',
+        apiKey: 'AIzaSyBkRYegvffwjfRw0KYYYFycrTO19JbvlwE'
+    });
+}]);
+
+app.run(function($rootScope) {
+    // Load the facebook SDK asynchronously	
+	(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id))
+			return;
+		js = d.createElement(s);
+		js.id = id;
+		js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=1811588739076937"
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+
+    // alert("hello");  
+});
 
 
 /**
@@ -80,7 +109,81 @@ app.controller('checkCtrl', function (/* $scope, $location, $http */) {
 	});
 
 
+app.controller('LoginCtrl', function ( $scope, $rootScope,  $facebook, $location, $window, GooglePlus, LoginService) {
+	
+	$scope.templates = [{
+        name: 'header.html',
+        url: 'header.html'
+    }];
+	var actType = '';
+	$scope.loginData = {};
+	$scope.loginStatus = 'disconnected';
+    $scope.facebookIsReady = false;
+    $scope.user = null;
+    console.log('login ctrl')
+	$scope.login = function() {
+	      // From now on you can use the Facebook service just as Facebook api says
+    	console.log('raja')
+	    	$facebook.login().then(function() {
+	            // alert("yes");
+	            refresh();
+	        }, function() {
+	            alert('ERr');
+	        });
+	    };
 
+    
+    $scope.login_google = function() {
+        GooglePlus.login().then(function(authResult) {
+            console.log(authResult);
+
+            GooglePlus.getUser().then(function(user) {
+
+                $scope.welcomeMsg = "Welcome " + user.name;
+                // $location.url('form.html');
+                $scope.user = user.name;
+		        $rootScope.user =  user.name;
+		        $rootScope.loginData = user;
+				$scope.loginData = user;
+				$rootScope.actType = 'gmail';
+				$scope.actType = 'gmail';
+				$rootScope.accountId = user.id;
+				$scope.accountId = user.id;
+                document.getElementById('loginStatus').innerHTML = "Welcome " + response.name;
+                LoginService.checkAndInsert($scope.loginData, $scope.actType).then(function(response){
+                	console.log('User successfully resgistered in ffc : ' + response)
+                });
+                console.log(user);
+            });
+        }, function(err) {
+            console.log(err);
+        });
+    };
+	    
+    function refresh() {
+        $facebook.api("/me").then(
+            function(response) {
+                console.log(response);
+                $scope.user = response.name;
+		        $rootScope.user =  response.name;
+		        $rootScope.loginData = response;
+				$scope.loginData = response;
+				$rootScope.actType = 'fb';
+				$scope.actType = 'fb';
+				$rootScope.accountId = response.id;
+				$scope.accountId = response.id;
+                document.getElementById('loginStatus').innerHTML = "Welcome " + response.name;
+                $scope.isLoggedIn = true;
+                LoginService.checkAndInsert($scope.loginData, $scope.actType).then(function(response){
+                	console.log('User successfully resgistered in ffc : ' + response)
+                });
+            },
+            function(err) {
+                $scope.welcomeMsg = "Please log in";
+            });
+    }
+	
+});
 
   
   app.controller('MenuCtrl', function ( $scope,MenuItemService,$rootScope) {

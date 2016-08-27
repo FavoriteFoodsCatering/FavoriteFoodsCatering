@@ -2,6 +2,7 @@
 <!-- Latest compiled and minified CSS -->
 
 <script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="https://connect.facebook.net/en_US/all.js" async defer></script>
 <meta name="google-signin-client_id"
 	content="1081708230862-m8i7oh49lk0p35kcccgest9sthri79nt.apps.googleusercontent.com">
 <body>
@@ -40,39 +41,44 @@
 		<section id="stuck_container">
 			<div class="container">
 				<div class="row">
-					<div class="grid_12">
+					<div class="grid_12" >
 					
 						<h1>
 							<a href="index.html"> <img src="images/logo.png"
 								alt="Logo alt">
 							</a>
 						</h1>
-						<div class="toploginlinks">
+						<div id="loginStatus"></div>
+						
+						<div class="toploginlinks" ng-controller="LoginCtrl">
 							<ul>
-
+								
 								<li><a href="#/orders"><i class="fa fa-shopping-cart">
 											<font color="red" size="2">{{cartSize}}</font>
 									</i></a></li>
 								<li class="dropdown"><a href="#"
 									class=" dropdown dropdown-toggle" id="logindropdown"
 									data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
-
 									<ul class="dropdown-menu" role="menu"
 										aria-labelledby="dropdownMenu">
-
-
-										<!-- 										<li><a href="#" class="fb-login-button" -->
-										<!-- 											autologoutlink="true" data-show-faces="false" -->
-										<!-- 												data-width="200" data-max-rows="2"size="medium"> </a></li> -->
-
-										<li><fb:login-button autologoutlink="true"
-												scope="public_profile,email" onlogin="checkLoginState();">
+										<!-- <li><fb:login-button autologoutlink="true" ng-onlogin="getLoginStatus()" scope="public_profile,email"> 
 												<i class="fa fa-facebook" aria-hidden="true"></i>
-											</fb:login-button></li>
-										<li><a tabindex="-1" href="#"
+											</fb:login-button></li> -->
+										<li>
+											<a class="btn btn-block btn-social btn-facebook" ng-click="login()">
+                								<span class="fa fa-facebook"></span> Sign in with Facebook
+            								</a>
+										</li>	
+											
+										<!-- <li><a tabindex="-1" href="#"
 											class="btn btn-tw g-signin2" data-onsuccess="onSignIn"> <i
 												class="fa fa-google "></i> Google
-										</a>
+										</a></li> -->
+										<li>
+											<a class="btn btn-block btn-social btn-google" ng-click="login_google()">
+								                <span class="fa fa-google"></span> Sign in with Google
+								            </a>
+										</li>
 									</ul></li>
 								<a href="#" onclick="signOut();">Sign out</a>
 							</ul>
@@ -89,9 +95,6 @@
 									<li><a href="#/orders">Orders</a></li>
 									<li><a href="#/testimonials">Reviews</a></li>
 									<li><a href="#/contacts">Contacts</a></li>
-
-
-
 								</ul>
 							</nav>
 							<div class="clear"></div>
@@ -101,3 +104,4 @@
 			</div>
 		</section>
 	</header>
+	

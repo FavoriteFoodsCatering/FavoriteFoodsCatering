@@ -44,6 +44,67 @@ angular.module('ffcWebApp.services', ['ffcWebApp.config'])
   
 })
 
+.factory('FacebookService', function($q) {
+	
+	console.log("Response  inside MenuItemService :" + ENV.apiUrl);
+    var facebookService = {};
+    
+   	facebookService.getMyLastName = function() {
+            var deferred = $q.defer();
+            FB.api('/me', {
+                fields: 'last_name'
+            }, function(response) {
+                if (!response || response.error) {
+                    deferred.reject('Error occured');
+                } else {
+                    return response;
+                }
+            });
+            return deferred.promise;
+        }
+   	
+   	facebookService.getMyUserId = function() {
+        var deferred = $q.defer();
+        FB.api('/me', {
+            fields: 'userId'
+        }, function(response) {
+            if (!response || response.error) {
+                deferred.reject('Error occured');
+            } else {
+                return response;
+            }
+        });
+        return deferred.promise;
+    }
+   	
+   	facebookService.getUserInfo = function() {
+        var deferred = $q.defer();
+        FB.api('/me', function(response) {
+            if (!response || response.error) {
+                deferred.reject('Error occured');
+            } else {
+                return response;
+            }
+        });
+        return deferred.promise;
+    }
+   	
+   	facebookServie.getMyUserName = function() {
+        var deferred = $q.defer();
+        FB.api('/me', {
+            fields: 'name'
+        }, function(response) {
+            if (!response || response.error) {
+                deferred.reject('Error occured');
+            } else {
+                return response;
+            }
+        });
+        return deferred.promise;
+    }
+})
+
+
 
 .factory('MenuItemService', function($http, ENV) {
 	
@@ -126,6 +187,30 @@ angular.module('ffcWebApp.services', ['ffcWebApp.config'])
         });
     };
 	
+    logInService.checkAndInsert= function(loginData, actType) {
+        
+        return $http({
+            url: ENV.apiUrl + 'user/checkUserAndInsert',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: {
+                "request_data_type": "User",
+                "request_data_method": "checkUser",
+                 "user_data": {
+					 "userName":loginData.name,
+					 "accountId":loginData.id,
+					 "accountType":actType
+				}
+            }
+        }).then(function(response) {
+            console.log("Response  login :" + response.data.request_data_result);
+            return response;
+        });
+    };
+	
+    
 	logInService.addUser= function(loginData) {
        
         return $http({

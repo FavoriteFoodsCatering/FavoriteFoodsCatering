@@ -18,6 +18,8 @@ public class User {
 	private String billtocity;
 	private String billtostate;
 	private String billtozipCode;
+	private String accountType;
+	private String accountId;
 	
 	
 	public String getUserName() {
@@ -147,6 +149,22 @@ public class User {
 
 	public void setCvcCode(String cvcCode) {
 		this.cvcCode = cvcCode;
+	}
+
+	public String getAccountType() {
+		return accountType;
+	}
+
+	public void setAccountType(String accountType) {
+		this.accountType = accountType;
+	}
+
+	public String getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
 	}
 	
 	

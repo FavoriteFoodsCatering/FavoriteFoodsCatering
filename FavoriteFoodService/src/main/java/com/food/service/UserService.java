@@ -10,6 +10,7 @@ public interface UserService {
 		public ResponseEntity<Response> getUsers(RequestData request);
 		public ResponseEntity<Response> addUser(RequestData request);
 		public ResponseEntity<Response> checkUser(RequestData request);
+		public ResponseEntity<Response> checkUserAndInsert(RequestData request);
 		public ResponseEntity<Response> createUserProfile(RequestData request);
 		
 	

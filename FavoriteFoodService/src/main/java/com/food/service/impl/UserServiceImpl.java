@@ -118,6 +118,47 @@ public class UserServiceImpl implements UserService {
 	
 
 	@Override
+	@RequestMapping(value="/checkUserAndInsert" ,method = RequestMethod.POST)
+	public ResponseEntity<Response> checkUserAndInsert(@RequestBody RequestData request) {
+		
+		DaoFactory factory = DaoFactory.getDaoFactory();
+		ObjectDao dao = factory.getObjectDao();
+		
+		Map<String, String> queryParams = new HashMap<String, String>();
+		queryParams.put("userName", request.getUser_data().getUserName());
+		queryParams.put("accountId", request.getUser_data().getAccountId());
+		queryParams.put("actType", request.getUser_data().getAccountType());
+		
+		String entityName = "CHECK_USER";
+		boolean isexists=false;
+		
+		List<Object> readObject ;
+		readObject = dao.readObjects(entityName, queryParams);
+		
+		if(! ((Map)readObject.get(0)).get("count").equals("0"))
+			isexists =true;
+		
+		if(!isexists){
+			String entityInsName = "INSERT_ACT_USER";
+			boolean insertFlag ;
+			insertFlag = dao.insertUpdateObject(entityInsName, queryParams);
+			isexists =true;
+		}
+		Map<String,String> response = new HashMap<String,String>();
+		
+		response.put("isexists", Boolean.toString(isexists));
+		
+		SimpleResponse reponse = new SimpleResponse("" + true,
+				request.getRequest_data_type(),
+				request.getRequest_data_method(), response);
+		
+		ResponseEntity<Response> entity = new ResponseEntity<Response>(reponse,
+				HttpStatus.OK);
+		
+		return entity;
+	}
+	
+	@Override
 	@RequestMapping(value="/createUserProfile" ,method = RequestMethod.POST)
 	public ResponseEntity<Response> createUserProfile(@RequestBody RequestData request) {
 		

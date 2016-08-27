@@ -25,7 +25,7 @@ console.log('in login');
   ];
 })
 
-.controller('LoginCtrl', function($scope, $stateParams, LoginService, Session, $rootScope, $state, MenuItemService, $timeout,$rootScope) {
+.controller('LoginCtrl', function($scope, $stateParams, LoginService, Session, $rootScope, $state, MenuItemService, $timeout,$window, sAuth) {
 console.log('LoginCtrl');
 		
 $rootScope.cartSize=0;
@@ -81,6 +81,88 @@ $rootScope.cartSize=0;
    
   };
   
+  
+  /*$scope.checkLoginState = function(){
+	  FB.getLoginStatus().then(function(response) {
+		  
+	  });
+  }*/
+  
+  
+
+	  
+	  /*$scope.checkLoginState = function() {
+		FB.api('/me', function(response) {
+            if (!response || response.error) {
+            	
+				console.log('Failed to login : ' + response.error);
+            } else {
+            	$rootScope.user =  response;
+				$scope.user =  response;
+				$rootScope.loginData = response;
+				$scope.loginData = response;
+				console.log('Successful login for in controller : ' + response);
+            }
+        });
+		FB.Event.subscribe('auth.authResponseChange', function(res) {
+			if (res.status === 'connected') {
+				
+				 * The user is already logged, is possible
+				 * retrieve his personal info
+				 
+				facebookService.getUserInfo().then(function(response){
+					$rootScope.user = _self.user = response;
+					$scope.user = _self.user = response;
+					$rootScope.loginData = response;
+					$scope.loginData = response;
+					console.log('Successful login for in controller : ' + response);
+				});
+
+				
+				 * This is also the point where you should
+				 * create a session for the current user. For
+				 * this purpose you can use the data inside the
+				 * res.authResponse object.
+				 
+
+			} else {
+				
+				 * The user is not logged to the app, or into
+				 * Facebook: destroy the session on the server.
+				 
+			}
+		});
+	}*/
+	  
+	  
+	  $scope.logout = function() {
+		  var _self = this;
+		  FB.logout(function(response) {
+		    $rootScope.$apply(function() {
+		      $rootScope.user = _self.user = {};
+		      $scope.user = _self.user = {};
+		      $rootScope.loginData = {};
+		      $scope.loginData = {};
+		    });
+		  });
+
+		}
+	  
+	$scope.getMyLastName = function() {
+		   facebookService.getMyLastName() 
+		     .then(function(response) {
+		       $scope.last_name = response.last_name;
+		     }
+		   );
+    };
+		
+    
+    /*$scope.checkLoginState = function(){
+    	facebookService.getMyUserId().then(function(response){
+    		$scope.userId = response.userId;
+    	});
+    };*/
+		
   $scope.doSignUp = function() {
     console.log('Doing Sign Up', $scope.loginData.username);
 	
