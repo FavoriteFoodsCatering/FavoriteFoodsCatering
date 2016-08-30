@@ -20,9 +20,7 @@ var app=angular.module('ffcWebApp', [
         }
     };
 });
-  
 
-  
 /**
  * Configure the Routes
  */
@@ -186,13 +184,15 @@ app.controller('LoginCtrl', function ( $scope, $rootScope,  $facebook, $location
 });
 
   
-  app.controller('MenuCtrl', function ( $scope,MenuItemService,$rootScope) {
+  app.controller('MenuCtrl', function ( $scope,MenuItemService,$rootScope,SessionService) {
 	  console.log("Menu Controller");
 	  console.log("ROOR"+$rootScope.cartSize);
 	 if( $rootScope.cartSize){}
-	 else
+	 else{
 	 	 $rootScope.cartSize=0;
-     
+	 	 SessionService.createCart();
+	 	 $rootScope.cartId=1;
+     }
 	 $rootScope.orderType = "cater";
 	 $rootScope.userId=36;
 	
@@ -210,37 +210,50 @@ app.controller('LoginCtrl', function ( $scope, $rootScope,  $facebook, $location
 		  $rootScope.menu.orderType = value;
 	  }
 	  
-	  $scope.addItem=function(itemId,rate){
-		  console.log('add item :'+itemId +' '+ $rootScope.userId + 'order type'+ $rootScope.orderType);
+	//  $scope.addItem=function(itemId,rate){
+	//	  console.log('add item :'+itemId +' '+ $rootScope.userId + 'order type'+ $rootScope.orderType);
 		  		  
-		  MenuItemService.addItem($rootScope.userId,itemId, $rootScope.orderType).then(function(response){
-			  if(response.data.request_data_result.status==true){
-				  $rootScope.cartSize += 1;
-				  $rootScope.cartId=response.data.request_data_result.cartId;
-				  console.log('Cart Size : ' +$rootScope.cartSize +' and cartId'+$rootScope.cartId);
-			  }else{
-				  console.log('Item already added to the cart');
-			  }
-		  });
+	//	  MenuItemService.addItem($rootScope.userId,itemId, $rootScope.orderType).then(function(response){
+	//		  if(response.data.request_data_result.status==true){
+	//			  $rootScope.cartSize += 1;
+	//			  $rootScope.cartId=response.data.request_data_result.cartId;
+	//			  console.log('Cart Size : ' +$rootScope.cartSize +' and cartId'+$rootScope.cartId);
+	//		  }else{
+	//			  console.log('Item already added to the cart');
+	//		  }
+	//	  });
 		 
-		}; 
+	//	}; 
+		
+	  $scope.addItem=function(itemId,itemName,itemDesc,imageUrl){
+		  console.log('add item :'+itemId +' '+ $rootScope.userId + ' order type'+ $rootScope.orderType);
+		  SessionService.updateCart(itemId,itemName,itemDesc,imageUrl);
+		  $rootScope.cartSize +=1;
 		  
+		  console.log(SessionService);
+	  };
 	  
 	});
   
   
-  app.controller('CheckOutCtrl', function ($scope,CheckOutService,$rootScope) {
+  app.controller('CheckOutCtrl', function ($scope,CheckOutService,$rootScope,SessionService,OrderService) {
 	  console.log("CheckOutCtrl Controller reporting for duty." + $rootScope.userId);
 
-	  CheckOutService.checkOut($rootScope.userId,$rootScope.cartId).then(function(response){
-		  $scope.request_data_type = response.data.request_data_type;
-			$scope.coresults = response.data.request_data_result;
-		  console.log('checkout res : '+$scope.coresults.itemsObj[0].itemName);
+	//  CheckOutService.checkOut($rootScope.userId,$rootScope.cartId).then(function(response){
+	//	  $scope.request_data_type = response.data.request_data_type;
+	//		$scope.coresults = response.data.request_data_result;
+	//	  console.log('checkout res : '+$scope.coresults.itemsObj[0].itemName);
 		  
-	  });
+	//  });
+	
+	  
+	  $scope.coresults = SessionService.cart;
+	  console.log('Bala :'+$scope.coresults);
+	  console.log(SessionService.cart.cartItem);
+	  
 	  
 		 $scope.deleteItem = function(itemId) { 
-			 console.log("OrderCtrl Controller deleting order item." + itemId);
+			 console.log("CheckOutCtrl Controller deleting order item." + itemId);
 			 CheckOutService.deleteItem($rootScope.userId,$rootScope.cartId,itemId).then(function(response){
 				$rootScope.itemDeleted = response.data.request_data_result;
 			  console.log('Item deleted : '+$scope.itemDeleted);
@@ -253,8 +266,9 @@ app.controller('LoginCtrl', function ( $scope, $rootScope,  $facebook, $location
 		 };
 	  
 		 $scope.submitOrder = function() { 
-			 console.log("OrderCtrl Controller submitting order.");
-			 CheckOutService.submitOrder($rootScope.userId,$rootScope.cartId).then(function(response){
+			 console.log("CheckOutCtrl Controller submitting order.");
+			 console.log(SessionService.cart.cartItem);
+			 CheckOutService.submitOrder($rootScope.userId,$rootScope.cartId,null,SessionService.cart.cartItem).then(function(response){
 				$rootScope.itemDeleted = response.data.request_data_result;
 			  console.log('Item deleted : '+$scope.itemDeleted);
 			  if(response.data.request_data_result==true){
@@ -269,17 +283,24 @@ app.controller('LoginCtrl', function ( $scope, $rootScope,  $facebook, $location
 
   
   
-  app.controller('OrderCtrl', function ($scope,OrderService,$rootScope, $location, $route) {
+  app.controller('OrderCtrl', function ($scope,OrderService,$rootScope, $location, $route,SessionService) {
+	  
+	  $rootScope.coresults = SessionService.cart;
 	 
-	  $scope.reviewOrder = function(NumPpl) {
-		 console.log("OrderCtrl Controller reporting for duty." + NumPpl);
-	  OrderService.reviewOrder($rootScope.userId,$rootScope.cartId,$scope.NumPpl).then(function(response){
-			$rootScope.orderRes = response.data.request_data_result;
-		  console.log('checkout res : '+$scope.orderRes.shipAddress.add1);
-		$location.path('/reviewOrder');
-		$route.reload();
-	  });
-	 };
+		 $scope.reviewOrder = function(NumPpl) {
+			 console.log("dd CheckOutCtrl Controller reporting for duty." + NumPpl);
+			 console.log($rootScope.coresults);
+		
+			 OrderService.reviewOrder($rootScope.userId,$rootScope.cartId,$scope.NumPpl).then(function(response){
+				$rootScope.orderRes = response.data.request_data_result;
+				$rootScope.coresults = SessionService.cart;
+				
+			  console.log('checkout res : '+$scope.orderRes.shipAddress.add1);
+			 // $state.go('reviewOrder');
+			$location.path('/reviewOrder');
+			$route.reload();
+		  });
+		 };
 	 
 	 $scope.deleteItem = function(itemId) { 
 		 console.log("OrderCtrl Controller deleting order item." + itemId);
@@ -295,5 +316,5 @@ app.controller('LoginCtrl', function ( $scope, $rootScope,  $facebook, $location
 	 };
 	 
 	});
-  
+
  

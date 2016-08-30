@@ -82,3 +82,12 @@ document.getElementById('logindropdown').style.display = "none";
 document.getElementById('hidetext').style.display = "none";	
 //document.getElementById('showafterlogin').style.display="visible";
     }
+
+//'use strict';
+function Cart() {
+  return {
+    'cartId': '',
+    'cartItem': []
+  };
+}
+

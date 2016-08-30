@@ -53,6 +53,8 @@ public class Cart {
 	private String customerId;
 	private String customerCardId;
 	
+	private MenuItem[] cartItem;
+	
 	private shipping_address shipping_address;
 	private billing_address billing_address;
 	private amount_money amount_money;
@@ -322,5 +324,12 @@ public class Cart {
 		this.phoneNo = phoneNo;
 	}
 	
+
+	public MenuItem[] getCartItem() {
+		return cartItem;
+	}
+	public void setCartItem(MenuItem[] cartItem) {
+		this.cartItem = cartItem;
+	}
 
 }

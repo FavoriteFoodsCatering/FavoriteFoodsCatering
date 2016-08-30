@@ -3,19 +3,16 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Checkout</title>
-<script>
 
-<script type="text/javascript" src="https://js.squareup.com/v2/paymentform"></script>
 
-</script>
 </head>
-<body>
+<body ng-app="ffcWebApp">
 	<section class="content">
 		<div class="container">
 			<div class="row">
 			<div class="grid_8">
 				<table style="width:100%">
-				<tr style="border-bottom: inset; background-color: transparent; padding-bottom: 20px;">
+				<tr style="border-bottom: inset; background-color:transparent; padding-bottom: 20px;">
 				    <td style="padding-right: 20px;"><h3>1</h3></td>
 				    <td><h3>Shipping address</h3></td>
 					<td>
@@ -45,14 +42,14 @@
 				    <td><h3>3</h3></td>
 				    <td><h3>Review items and shipping</h3></td>
 					<td>									           
-				          <div ng-repeat="cart in orderRes.itemsObj">				          
+				          <div ng-repeat="item in coresults.cartItem">				          
 				          <div class="extra_wrapper">
-				            <img src="{{cart.imageUrl}}" alt="" class="img_inner fleft inn__1">
+				            <img src="{{item.imageUrl}}" alt="" class="img_inner fleft inn__1">
 				            <div class="text1 tx__1">
-				              <a href="#">{{cart.itemName}} </a>
+				              <a href="#">{{item.itemName}} </a>
 				              <a href="" ng-click="deleteItem(cart.itemId);" class="icon_size pull-right"><i class="fa fa-trash-o"></i></a>              
 				            </div>
-				            <p>{{cart.description}}</p>
+				            <p>{{item.itemDesc}}</p>
 				          </div>
 				           <hr class="devider"/>
 				           </div>			          

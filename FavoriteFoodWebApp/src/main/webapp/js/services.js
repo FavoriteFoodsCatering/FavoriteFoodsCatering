@@ -316,9 +316,11 @@ angular.module('ffcWebApp.services', ['ffcWebApp.config'])
  	   });
     };
     
-    checkOutService.submitOrder = function(paymentId, expDate, netAmt) {
+    checkOutService.submitOrder = function(paymentId, expDate, netAmt,cartItems) {
+    	
+    	console.log(JSON.stringify(cartItems));
   	   return $http({
-  		   url : ENV.apiUrl + 'cart/chargeCreditCard' ,
+  		   url : ENV.apiUrl + 'cart/chargeCreditCardWithSquare' ,
   		   method : 'POST' ,
   		   headers : {
   			   'Content-Type':'application/json'
@@ -329,8 +331,10 @@ angular.module('ffcWebApp.services', ['ffcWebApp.config'])
   			   "cart_data":{
   				   "userPaymentId" : paymentId,
   				   "expDate" : expDate,
-  				   "netAmount" : netAmt
+  				   "netAmount" : netAmt,
+  				   "cartItem":cartItems
   			   }
+  			   
   		   }
   	   }).then(function(response) {
   		   return response;
@@ -396,21 +400,44 @@ angular.module('ffcWebApp.services', ['ffcWebApp.config'])
 })
 
 
-
-
 // Service to create and destroy sessions
-.service('Session', function() {
-    this.create = function(sessionId, userName, userRole,userId) {
+.service('SessionService', function() {
+	
+	var sessionService={};
+
+	sessionService.createCart = function(){
+		sessionService.cart = new Cart();	
+	};
+	
+	sessionService.clear = function(){
+		console.log('dddd');
+		sessionService.cart.cartId = 1;
+		console.log('dddd');
+		console.log(sessionService.cart);
+	};
+	
+	sessionService.save = function(){
+		sessionService.cart = session.cart;
+	};
+	
+	sessionService.updateCart= function(itemId,itemName,itemDesc,imageUrl){
+		console.log(sessionService.cart);
+		sessionService.cart.cartItem.push({'itemId':itemId,'itemName':itemName,'itemDesc':itemDesc,'imageUrl':imageUrl});
+		//console.log(sessionService.cart);
+	};
+	
+	sessionService.create = function(sessionId, userName, userRole,userId) {
         this.id = sessionId;
         this.userName = userName;
         this.userRole = userRole;
         this.userId = userId;
     };
-    this.destroy = function() {
+    sessionService.destroy = function() {
         this.id = null;
         this.userName = null;
         this.userRole = null;
         this.userId = null;
     };
-    return this;
+    
+    return sessionService;
 });

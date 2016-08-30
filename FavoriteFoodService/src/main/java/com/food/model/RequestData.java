@@ -7,6 +7,9 @@ public class RequestData {
 	private User user_data;
 	private Cart cart_data;
 	private MenuItem menu_data;
+	
+
+	
 
 	public String getRequest_data_type() {
 		return request_data_type;

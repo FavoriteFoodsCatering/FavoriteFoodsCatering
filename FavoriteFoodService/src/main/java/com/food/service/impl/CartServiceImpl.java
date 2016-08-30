@@ -43,18 +43,6 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 
-import net.authorize.Environment;
-import net.authorize.api.contract.v1.CreateTransactionRequest;
-import net.authorize.api.contract.v1.CreateTransactionResponse;
-import net.authorize.api.contract.v1.CreditCardType;
-import net.authorize.api.contract.v1.MerchantAuthenticationType;
-import net.authorize.api.contract.v1.MessageTypeEnum;
-import net.authorize.api.contract.v1.PaymentType;
-import net.authorize.api.contract.v1.TransactionRequestType;
-import net.authorize.api.contract.v1.TransactionResponse;
-import net.authorize.api.contract.v1.TransactionTypeEnum;
-import net.authorize.api.controller.CreateTransactionController;
-import net.authorize.api.controller.base.ApiOperationBase;
 
 /**
  * @author bkagidal
@@ -558,7 +546,7 @@ public class CartServiceImpl implements CartService {
 	
 	
 	
-	@Override
+	/*@Override
 	@RequestMapping(value="/chargeCreditCard" ,method = RequestMethod.POST)
 	public ResponseEntity<Response> chargeCreditCard(@RequestBody  RequestData request) {
 		//Common code to set for all requests
@@ -633,7 +621,7 @@ public class CartServiceImpl implements CartService {
 		
 		return entity;
 		
-    }
+    }*/
 	
 	public String insertOrder(@RequestBody  RequestData request) throws Exception{
 		
