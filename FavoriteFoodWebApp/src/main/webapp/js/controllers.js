@@ -1,356 +1,256 @@
-angular.module('ffcWebApp.controllers', [])
+angular.module('ffcWebApp.controllers', []);
+/**
+ * Controls the Blog
+ */
 
-.controller('AppCtrl', function($scope, $timeout,$state,$rootScope) {
 
-console.log('in login');
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
 
-})
-
-.controller('PlaylistsCtrl', function($scope) {
-	console.log('ddd');
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 },
-	{ title: 'BALA', id: 7 }
-  ];
-})
-
-.controller('LoginCtrl', function($scope, $stateParams, LoginService, Session, $rootScope, $state, MenuItemService, $timeout,$window, sAuth) {
-console.log('LoginCtrl');
-		
-$rootScope.cartSize=0;
-  // Form data for the login modal
-  
-  
-  $scope.loginData = {};
-
-  // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
-
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-	    console.log('Close');
-  // $state.go('ffcmenuitems');
-    $scope.modal.hide();
-  };
-
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
-  };
-
-  // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-	  $scope.loginMessage='';
-    console.log('Doing login', $scope.loginData);
-	//console.log('user name', $scope.loginData.username);
-	$rootScope.cartSize=0;
-	if(angular.isUndefined($scope.loginData.username) || $scope.loginData.username == null || $scope.loginData.username == ""){
-		$scope.loginMessage="Invalid User";
-		$scope.loginData.username='';
-		return true;
-	}
-		
-	LoginService.login($scope.loginData).then(function(response){
-		console.log(response.data.request_data_result.isexists +" "+response.data.request_data_result.userId );
-		if(response.data.request_data_result.isexists=="true"){
-			 $scope.loginMessage='';
-			 $rootScope.userId=response.data.request_data_result.userId;
-			 $state.go('app.ffcmenuitems');
-		}
-		else
-			$scope.loginMessage="Invalid User";
-	}
-	
-	); 	
-	$scope.loginData={};
-   
-  };
-  
-  
-  /*$scope.checkLoginState = function(){
-	  FB.getLoginStatus().then(function(response) {
-		  
-	  });
-  }*/
-  
-  
-
-	  
-	  /*$scope.checkLoginState = function() {
-		FB.api('/me', function(response) {
-            if (!response || response.error) {
-            	
-				console.log('Failed to login : ' + response.error);
-            } else {
-            	$rootScope.user =  response;
-				$scope.user =  response;
-				$rootScope.loginData = response;
-				$scope.loginData = response;
-				console.log('Successful login for in controller : ' + response);
-            }
-        });
-		FB.Event.subscribe('auth.authResponseChange', function(res) {
-			if (res.status === 'connected') {
-				
-				 * The user is already logged, is possible
-				 * retrieve his personal info
-				 
-				facebookService.getUserInfo().then(function(response){
-					$rootScope.user = _self.user = response;
-					$scope.user = _self.user = response;
-					$rootScope.loginData = response;
-					$scope.loginData = response;
-					console.log('Successful login for in controller : ' + response);
-				});
-
-				
-				 * This is also the point where you should
-				 * create a session for the current user. For
-				 * this purpose you can use the data inside the
-				 * res.authResponse object.
-				 
-
-			} else {
-				
-				 * The user is not logged to the app, or into
-				 * Facebook: destroy the session on the server.
-				 
-			}
-		});
-	}*/
-	  
-	  
-	  $scope.logout = function() {
-		  var _self = this;
-		  FB.logout(function(response) {
-		    $rootScope.$apply(function() {
-		      $rootScope.user = _self.user = {};
-		      $scope.user = _self.user = {};
-		      $rootScope.loginData = {};
-		      $scope.loginData = {};
-		    });
-		  });
-
-		}
-	  
-	$scope.getMyLastName = function() {
-		   facebookService.getMyLastName() 
-		     .then(function(response) {
-		       $scope.last_name = response.last_name;
-		     }
-		   );
-    };
-		
-    
-    /*$scope.checkLoginState = function(){
-    	facebookService.getMyUserId().then(function(response){
-    		$scope.userId = response.userId;
-    	});
-    };*/
-		
-  $scope.doSignUp = function() {
-    console.log('Doing Sign Up', $scope.loginData.username);
-	
-	$rootScope.cartSize=0;
-	if(angular.isUndefined($scope.loginData.username) || $scope.loginData.username == null){
-		$scope.loginMessage="Invalid User";
-		$scope.loginData.username='';
-		return true;
-	}
-	LoginService.addUser($scope.loginData).then(function(response){
-	 if(response.data.request_data_result==true){
-		 $scope.loginMessage='';
-		  $state.go('app.ffcmenuitems');
-	 }else
-		$scope.loginMessage="Sign Up Failed";
-	}
-	
-	);
-	$scope.loginData={};
-   
-  };
-  
-  $scope.addItem=function(){
-	  console.log('add item');
-	  $rootScope.cartSize = $rootScope.cartSize+1;
-  };
-})
-
-		
-
-.controller('FFCMenuCtrl', function($scope, $stateParams) {
-	console.log('FFCMenuCtrl');
-})
-
-.controller('PlaylistCtrl', function($scope, $stateParams) {
-})
-
-.controller('MenuItemCtrl', function($scope,$stateParams, Session, $rootScope, $state, MenuItemService, $timeout,$rootScope) {
-	console.log('MenuItemCtrl');
-	
-	
-	
-		
-		 MenuItemService.getMenuItems().then(function(response) {
-		$scope.request_data_type = response.data.request_data_type;
-		$scope.results = response.data.request_data_result;
-		
-		console.log($scope.results);
-		//$state.go('app.ffcmenuitems');
-	  });
-	
-	
-	$scope.addItem=function(itemId,rate){
-	  console.log('add item :'+itemId +' ' +rate+' '+ $rootScope.userId);
-	  
-	  MenuItemService.addItem($rootScope.userId,itemId,rate).then(function(response){
-		  if(response.data.request_data_result.status==true){
-		      $rootScope.cartSize = $rootScope.cartSize+1;
-		  }else{
-			  console.log('error adding item');
-		  }
-	  }		  
-	  );
-	}; 
-	  
-	  $scope.show = function() {
-        console.log('show');
-		   // Show the action sheet
-		   var hideSheet = $ionicActionSheet.show({
-			 buttons: [
-			   { text: '<font size="3">Problem with order</font>' },
-			   { text: '<font size="3">Delivery Issue</font>' }
-			 ],
-			 titleText: 'Email & Support',
-			 cancelText: '<font size="3">Cancel</font>',
-			 cancel: function() {
-				  // add cancel code..
-				},
-			 buttonClicked: function(index) {
-				 console.log(index);
-					$state.go('sendmail');
-			   return true;
-			 }
-			// buttonClicked:sendFeedback()
-		   });
-
-		   // For example's sake, hide the sheet after two seconds
-		  /* $timeout(function() {
-			 hideSheet();
-		   }, 2000);*/
-
-  };
-  
-   $scope.sendFeedback= function() {
-        if(window.plugins && window.plugins.emailComposer) {
-            window.plugins.emailComposer.showEmailComposerWithCallback(function(result) {
-                console.log("Response -> " + result);
-            }, 
-            "Feedback for your App", // Subject
-            "",                      // Body
-            ["test@example.com"],    // To
-            null,                    // CC
-            null,                    // BCC
-            false,                   // isHTML
-            null,                    // Attachments
-            null);                   // Attachment Data
-        }
-    };
- 
-	  
-  
-  
-   $scope.doCheckOut=function(){
-   console.log('Check out');
-   $state.go('checkout');
-   };
-
-	$scope.getMenuItems=function(){   
-	  MenuItemService.getMenuItems().then(function(response) {
-		$scope.request_data_type = response.data.request_data_type;
-		$scope.results = response.data.request_data_result;
-		$state.go('app.ffcmenuitems');
-	  });
-	};
-  
-    $scope.backCheckOut = function(){
-		console.log('back');
-		$ionicHistory.goBack();
-	};
-	
-	$scope.cancelEmail = function(){
-		console.log('back');
-		$ionicHistory.goBack();
-	};
-	
-	$scope.goback = function(){
-		console.log('goback');
-		$ionicHistory.goBack();
-	};
- 
-	$scope.doHelp=function(){
-	 $state.go('help');
-    };
- 
-})
-
-.controller('ItemDetailCtrl', function($scope,$stateParams, Session, $rootScope, $state, ItemDetailService, $timeout) {
-	console.log('ItemDetailService');
-	ItemDetailService.getItemDetails($stateParams).then(function(response) {
-    $scope.request_data_type = response.data.request_data_type;
-    $scope.results = response.data.request_data_result;
-	console.log($scope.results);
-  })
-  
-  
-  
-  .controller('BlogCtrl', function (/* $scope, $location, $http */) {
+app.controller('BlogCtrl', function (/* $scope, $location, $http */) {
 	  console.log("Blog Controller reporting for duty.");
-	})
+	});
 
 	/**
 	 * Controls all other Pages
 	 */
- 
- .controller('PageCtrl', function (/* $scope, $location, $http */) {
+
+app.controller('PageCtrl', function (/* $scope, $location, $http */) {
 	  console.log("Page Controller reporting for duty.");
 
 	  // Activates the Carousel
 	  $('.carousel').carousel({
 	    interval: 5000
-	  })
+	  });
 
 	  // Activates Tooltips for Social Links
 	  $('.tooltip-social').tooltip({
 	    selector: "a[data-toggle=tooltip]"
 	  });
 	});
-  
-	
-	
-  
-  
-	
-	
-	
 
+
+app.controller('checkCtrl', function (/* $scope, $location, $http */) {
+	  console.log("chk Controller reporting for duty.");
+
+	  // Activates the Carousel
+	  $('.carousel').carousel({
+	    interval: 5000
+	  });
+
+	  // Activates Tooltips for Social Links
+	  $('.tooltip-social').tooltip({
+	    selector: "a[data-toggle=tooltip]"
+	  });
+	});
+
+
+app.controller('LoginCtrl', function ( $scope, $rootScope,  $facebook, $location, $window, GooglePlus, LoginService) {
+	
+	$scope.templates = [{
+        name: 'header.html',
+        url: 'header.html'
+    }];
+	$scope.loginData = {};
+	$scope.loginStatus = 'disconnected';
+    $scope.facebookIsReady = false;
+    $scope.user = null;
+    console.log('login ctrl');
+	$scope.login = function() {
+	      // From now on you can use the Facebook service just as Facebook api says
+    	console.log('raja');
+	    	$facebook.login().then(function() {
+	            // alert("yes");
+	            refresh();
+	        }, function() {
+	            alert('ERr');
+	        });
+	    };
+
+    
+    $scope.login_google = function() {
+        GooglePlus.login().then(function(authResult) {
+            console.log(authResult);
+
+            GooglePlus.getUser().then(function(user) {
+
+                $scope.welcomeMsg = "Welcome " + user.name;
+                // $location.url('form.html');
+                $scope.user = user.name;
+		        $rootScope.user =  user.name;
+		        $rootScope.loginData = user;
+				$scope.loginData = user;
+				$rootScope.actType = 'gmail';
+				$scope.actType = 'gmail';
+				$rootScope.accountId = user.id;
+				$scope.accountId = user.id;
+                document.getElementById('loginStatus').innerHTML = "Welcome " + response.name;
+                LoginService.checkAndInsert($scope.loginData, $scope.actType).then(function(response){
+                	console.log('User successfully resgistered in ffc : ' + response);
+                });
+                console.log(user);
+            });
+        }, function(err) {
+            console.log(err);
+        });
+    };
+	    
+    function refresh() {
+        $facebook.api("/me").then(
+            function(response) {
+                console.log(response);
+                $scope.user = response.name;
+		        $rootScope.user =  response.name;
+		        $rootScope.loginData = response;
+				$scope.loginData = response;
+				$rootScope.actType = 'fb';
+				$scope.actType = 'fb';
+				$rootScope.accountId = response.id;
+				$scope.accountId = response.id;
+                document.getElementById('loginStatus').innerHTML = "Welcome " + response.name;
+                $scope.isLoggedIn = true;
+                LoginService.checkAndInsert($scope.loginData, $scope.actType).then(function(response){
+                	console.log('User successfully resgistered in ffc : ' + response);
+                });
+            },
+            function(err) {
+                $scope.welcomeMsg = "Please log in";
+            });
+    }
+	
 });
 
+  
+  app.controller('MenuCtrl', function ( $scope,MenuItemService,$rootScope,SessionService) {
+	  console.log("Menu Controller");
+	  console.log("ROOR"+$rootScope.cartSize);
+	 if( $rootScope.cartSize){}
+	 else{
+	 	 $rootScope.cartSize=0;
+	 	 SessionService.createCart();
+	 	 $rootScope.cartId=1;
+     }
+	 $rootScope.orderType = "cater";
+	 $rootScope.userId=36;
+	
+	 
+	  MenuItemService.getMenuItems().then(function(response) {
+			$scope.request_data_type = response.data.request_data_type;
+			$scope.results = response.data.request_data_result;
+		//	$state.go('app.ffcmenuitems');
+			
+		console.log($scope.results);	
+		  });
+	  
+	  $scope.setSelectedType = function (value) {
+		  console.log('ordertype change ' + value);
+		  $rootScope.menu.orderType = value;
+	  };
+	  
+	//  $scope.addItem=function(itemId,rate){
+	//	  console.log('add item :'+itemId +' '+ $rootScope.userId + 'order type'+ $rootScope.orderType);
+		  		  
+	//	  MenuItemService.addItem($rootScope.userId,itemId, $rootScope.orderType).then(function(response){
+	//		  if(response.data.request_data_result.status==true){
+	//			  $rootScope.cartSize += 1;
+	//			  $rootScope.cartId=response.data.request_data_result.cartId;
+	//			  console.log('Cart Size : ' +$rootScope.cartSize +' and cartId'+$rootScope.cartId);
+	//		  }else{
+	//			  console.log('Item already added to the cart');
+	//		  }
+	//	  });
+		 
+	//	}; 
+		
+	  $scope.addItem=function(itemId,itemName,itemDesc,imageUrl){
+		  console.log('add item :'+itemId +' '+ $rootScope.userId + ' order type'+ $rootScope.orderType);
+		  SessionService.updateCart(itemId,itemName,itemDesc,imageUrl);
+		  $rootScope.cartSize +=1;
+		  
+		  console.log(SessionService);
+	  };
+	  
+	});
+  
+  
+  app.controller('CheckOutCtrl', function ($scope,CheckOutService,$rootScope,SessionService,OrderService) {
+	  console.log("CheckOutCtrl Controller reporting for duty." + $rootScope.userId);
+
+	//  CheckOutService.checkOut($rootScope.userId,$rootScope.cartId).then(function(response){
+	//	  $scope.request_data_type = response.data.request_data_type;
+	//		$scope.coresults = response.data.request_data_result;
+	//	  console.log('checkout res : '+$scope.coresults.itemsObj[0].itemName);
+		  
+	//  });
+	
+	  
+	  $scope.coresults = SessionService.cart;
+	  console.log('Bala :'+$scope.coresults);
+	  console.log(SessionService.cart.cartItem);
+	  
+	  
+		 $scope.deleteItem = function(itemId) { 
+			 console.log("CheckOutCtrl Controller deleting order item." + itemId);
+			 CheckOutService.deleteItem($rootScope.userId,$rootScope.cartId,itemId).then(function(response){
+				$rootScope.itemDeleted = response.data.request_data_result;
+			  console.log('Item deleted : '+$scope.itemDeleted);
+			  if(response.data.request_data_result==true){
+				  $rootScope.cartSize -= 1;
+				  $location.path('/reviewOrder');
+				  $route.reload();
+			  }
+		  });
+		 };
+	  
+		 $scope.submitOrder = function() { 
+			 console.log("CheckOutCtrl Controller submitting order.");
+			 console.log(SessionService.cart.cartItem);
+			 CheckOutService.submitOrder($rootScope.userId,$rootScope.cartId,null,SessionService.cart.cartItem).then(function(response){
+				$rootScope.itemDeleted = response.data.request_data_result;
+			  console.log('Item deleted : '+$scope.itemDeleted);
+			  if(response.data.request_data_result==true){
+				  $rootScope.cartSize -= 1;
+				  $location.path('/reviewOrder');
+				  $route.reload();
+			  }
+		  });
+		 };
+		 
+	});
+
+  
+  
+  app.controller('OrderCtrl', function ($scope,OrderService,$rootScope, $location, $route,SessionService) {
+	  
+	  $rootScope.coresults = SessionService.cart;
+	 
+		 $scope.reviewOrder = function(NumPpl) {
+			 console.log("dd CheckOutCtrl Controller reporting for duty." + NumPpl);
+			 console.log($rootScope.coresults);
+		
+			 OrderService.reviewOrder($rootScope.userId,$rootScope.cartId,$scope.NumPpl).then(function(response){
+				$rootScope.orderRes = response.data.request_data_result;
+				$rootScope.coresults = SessionService.cart;
+				
+			  console.log('checkout res : '+$scope.orderRes.shipAddress.add1);
+			 // $state.go('reviewOrder');
+			$location.path('/reviewOrder');
+			$route.reload();
+		  });
+		 };
+	 
+	 $scope.deleteItem = function(itemId) { 
+		 console.log("OrderCtrl Controller deleting order item." + itemId);
+	  OrderService.deleteItem($rootScope.userId,$rootScope.cartId,itemId).then(function(response){
+			$rootScope.itemDeleted = response.data.request_data_result;
+		  console.log('Item deleted : '+$scope.itemDeleted);
+		  if(response.data.request_data_result==true){
+			  $rootScope.cartSize -= 1;
+			  $location.path('/orders');
+			  $route.reload();
+		  }
+	  });
+	 };
+	 
+	});
 
 
  
