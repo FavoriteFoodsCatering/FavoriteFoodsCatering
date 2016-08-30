@@ -48,15 +48,13 @@ var ua=navigator.userAgent.toLocaleLowerCase(),
  result = ua.match(regV),
  userScale="";
 if(!result){
- userScale=",user-scalable=0"
+ userScale=",user-scalable=0";
 }
-document.write('<meta name="viewport" content="width=device-width,initial-scale=1.0'+userScale+'">')
+document.write('<meta name="viewport" content="width=device-width,initial-scale=1.0'+userScale+'">');
 
 var currentYear = (new Date).getFullYear();
   $(document).ready(function() {
   $("#copyright-year").text( (new Date).getFullYear() );
   });
 
-  $(function(){
-  $('.sf-menu').superfish({autoArrows: true})
-})
+ 

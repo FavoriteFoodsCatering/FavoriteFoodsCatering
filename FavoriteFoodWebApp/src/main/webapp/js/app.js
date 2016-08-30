@@ -55,7 +55,7 @@ app.run(function($rootScope) {
 			return;
 		js = d.createElement(s);
 		js.id = id;
-		js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=1811588739076937"
+		js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=1811588739076937";
 		fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));
 
@@ -83,7 +83,7 @@ app.controller('PageCtrl', function (/* $scope, $location, $http */) {
 	  // Activates the Carousel
 	  $('.carousel').carousel({
 	    interval: 5000
-	  })
+	  });
 
 	  // Activates Tooltips for Social Links
 	  $('.tooltip-social').tooltip({
@@ -98,7 +98,7 @@ app.controller('checkCtrl', function (/* $scope, $location, $http */) {
 	  // Activates the Carousel
 	  $('.carousel').carousel({
 	    interval: 5000
-	  })
+	  });
 
 	  // Activates Tooltips for Social Links
 	  $('.tooltip-social').tooltip({
@@ -113,15 +113,14 @@ app.controller('LoginCtrl', function ( $scope, $rootScope,  $facebook, $location
         name: 'header.html',
         url: 'header.html'
     }];
-	var actType = '';
 	$scope.loginData = {};
 	$scope.loginStatus = 'disconnected';
     $scope.facebookIsReady = false;
     $scope.user = null;
-    console.log('login ctrl')
+    console.log('login ctrl');
 	$scope.login = function() {
 	      // From now on you can use the Facebook service just as Facebook api says
-    	console.log('raja')
+    	console.log('raja');
 	    	$facebook.login().then(function() {
 	            // alert("yes");
 	            refresh();
@@ -149,7 +148,7 @@ app.controller('LoginCtrl', function ( $scope, $rootScope,  $facebook, $location
 				$scope.accountId = user.id;
                 document.getElementById('loginStatus').innerHTML = "Welcome " + response.name;
                 LoginService.checkAndInsert($scope.loginData, $scope.actType).then(function(response){
-                	console.log('User successfully resgistered in ffc : ' + response)
+                	console.log('User successfully resgistered in ffc : ' + response);
                 });
                 console.log(user);
             });
@@ -173,7 +172,7 @@ app.controller('LoginCtrl', function ( $scope, $rootScope,  $facebook, $location
                 document.getElementById('loginStatus').innerHTML = "Welcome " + response.name;
                 $scope.isLoggedIn = true;
                 LoginService.checkAndInsert($scope.loginData, $scope.actType).then(function(response){
-                	console.log('User successfully resgistered in ffc : ' + response)
+                	console.log('User successfully resgistered in ffc : ' + response);
                 });
             },
             function(err) {
@@ -208,7 +207,7 @@ app.controller('LoginCtrl', function ( $scope, $rootScope,  $facebook, $location
 	  $scope.setSelectedType = function (value) {
 		  console.log('ordertype change ' + value);
 		  $rootScope.menu.orderType = value;
-	  }
+	  };
 	  
 	//  $scope.addItem=function(itemId,rate){
 	//	  console.log('add item :'+itemId +' '+ $rootScope.userId + 'order type'+ $rootScope.orderType);
