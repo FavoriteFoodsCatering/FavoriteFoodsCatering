@@ -420,9 +420,9 @@ angular.module('ffcWebApp.services', ['ffcWebApp.config'])
 		sessionService.cart = session.cart;
 	};
 	
-	sessionService.updateCart= function(itemId,itemName,itemDesc,imageUrl){
+	sessionService.updateCart= function(itemId,itemName,itemDesc,imageUrl, categoryId){
 		console.log(sessionService.cart);
-		sessionService.cart.cartItem.push({'itemId':itemId,'itemName':itemName,'itemDesc':itemDesc,'imageUrl':imageUrl});
+		sessionService.cart.cartItem.push({'itemId':itemId,'itemName':itemName,'itemDesc':itemDesc,'imageUrl':imageUrl,'categoryId':categoryId});
 		//console.log(sessionService.cart);
 	};
 	

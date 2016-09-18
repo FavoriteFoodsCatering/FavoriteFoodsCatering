@@ -544,7 +544,12 @@ public class CartServiceImpl implements CartService {
     }
 	
 	
+	private boolean insertOrderInDB() {
+		boolean insertStatus = false;
+		
+		return insertStatus;
 	
+	}
 	
 	/*@Override
 	@RequestMapping(value="/chargeCreditCard" ,method = RequestMethod.POST)

@@ -18,7 +18,9 @@
            	<h2>( No items in this list yet! )</h2>
            	$('#addDiv').hide();
            </div>
-           --> <h2>Your Orders</h2>
+           --> 
+            <flash-message><div class="my-flash">{{ flash.text }}</div></flash-message>
+           <h2>Your Orders</h2>
           <div ng-repeat="item in coresults.cartItem">
           <div class="extra_wrapper">
             <img src="{{item.imageUrl}}" alt="" class="img_inner fleft inn__1">

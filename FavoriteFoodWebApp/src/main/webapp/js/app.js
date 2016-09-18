@@ -7,7 +7,7 @@
  * Main AngularJS Web Application
  */
 var app=angular.module('ffcWebApp', [
-	'ngRoute', 'ngFacebook', 'googleplus', 'ffcWebApp.services','ffcWebApp.controllers'
+	'ngRoute', 'ngFacebook', 'googleplus', 'flash', 'ffcWebApp.services','ffcWebApp.controllers'
 ]).service('sharedProperties', function () {
     var uniEdit = 0;
 
@@ -35,6 +35,23 @@ app.config(['$routeProvider', function ($routeProvider) {
     .otherwise("/404", {templateUrl: "partials/404.html", controller: "PageCtrl"});
 }]);
 
+/*app.config('flash', function($rootScope) {
+	  var queue = [];
+	  var currentMessage = "";
+
+	  $rootScope.$on("$routeChangeSuccess", function() {
+	    currentMessage = queue.shift() || "";
+	  });
+
+	  return {
+	    setMessage: function(message) {
+	      queue.push(message);
+	    },
+	    getMessage: function() {
+	      return currentMessage;
+	    }
+	  };
+});*/
 
 app.config(function($facebookProvider, $routeProvider) {
     $facebookProvider.setAppId('1811588739076937');

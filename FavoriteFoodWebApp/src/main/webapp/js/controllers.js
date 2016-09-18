@@ -5,6 +5,8 @@ angular.module('ffcWebApp.controllers', []);
 
 
 
+
+
 app.controller('BlogCtrl', function (/* $scope, $location, $http */) {
 	  console.log("Blog Controller reporting for duty.");
 	});
@@ -25,6 +27,9 @@ app.controller('PageCtrl', function (/* $scope, $location, $http */) {
 	  $('.tooltip-social').tooltip({
 	    selector: "a[data-toggle=tooltip]"
 	  });
+	  
+	  
+	  
 	});
 
 
@@ -71,7 +76,7 @@ app.controller('LoginCtrl', function ( $scope, $rootScope,  $facebook, $location
             console.log(authResult);
 
             GooglePlus.getUser().then(function(user) {
-
+            	console.log(user)
                 $scope.welcomeMsg = "Welcome " + user.name;
                 // $location.url('form.html');
                 $scope.user = user.name;
@@ -82,10 +87,13 @@ app.controller('LoginCtrl', function ( $scope, $rootScope,  $facebook, $location
 				$scope.actType = 'gmail';
 				$rootScope.accountId = user.id;
 				$scope.accountId = user.id;
-                document.getElementById('loginStatus').innerHTML = "Welcome " + response.name;
-                LoginService.checkAndInsert($scope.loginData, $scope.actType).then(function(response){
-                	console.log('User successfully resgistered in ffc : ' + response);
-                });
+                document.getElementById('loginStatus').innerHTML = "Welcome " + user.name;
+                if($scope.accountId != null) {
+                	LoginService.checkAndInsert($scope.loginData, $scope.actType).then(function(response){
+                    	console.log('User successfully resgistered in ffc : ' + response);
+                    });
+                }
+                
                 console.log(user);
             });
         }, function(err) {
@@ -132,6 +140,7 @@ app.controller('LoginCtrl', function ( $scope, $rootScope,  $facebook, $location
 	 $rootScope.userId=36;
 	
 	 
+	 	 
 	  MenuItemService.getMenuItems().then(function(response) {
 			$scope.request_data_type = response.data.request_data_type;
 			$scope.results = response.data.request_data_result;
@@ -160,11 +169,11 @@ app.controller('LoginCtrl', function ( $scope, $rootScope,  $facebook, $location
 		 
 	//	}; 
 		
-	  $scope.addItem=function(itemId,itemName,itemDesc,imageUrl){
+	  $scope.addItem=function(itemId,itemName,itemDesc,imageUrl,categoryId){
 		  console.log('add item :'+itemId +' '+ $rootScope.userId + ' order type'+ $rootScope.orderType);
-		  SessionService.updateCart(itemId,itemName,itemDesc,imageUrl);
+		  SessionService.updateCart(itemId,itemName,itemDesc,imageUrl,categoryId);
 		  $rootScope.cartSize +=1;
-		  
+		  var caterArr = new Array("2","3","1","0");
 		  console.log(SessionService);
 	  };
 	  
@@ -218,23 +227,35 @@ app.controller('LoginCtrl', function ( $scope, $rootScope,  $facebook, $location
 
   
   
-  app.controller('OrderCtrl', function ($scope,OrderService,$rootScope, $location, $route,SessionService) {
-	  
+  app.controller('OrderCtrl', function ($scope,OrderService,$rootScope, $location, $route,SessionService, flash) {
+	 
 	  $rootScope.coresults = SessionService.cart;
 	 
 		 $scope.reviewOrder = function(NumPpl) {
 			 console.log("dd CheckOutCtrl Controller reporting for duty." + NumPpl);
 			 console.log($rootScope.coresults);
-		
-			 OrderService.reviewOrder($rootScope.userId,$rootScope.cartId,$scope.NumPpl).then(function(response){
-				$rootScope.orderRes = response.data.request_data_result;
-				$rootScope.coresults = SessionService.cart;
-				
-			  console.log('checkout res : '+$scope.orderRes.shipAddress.add1);
-			 // $state.go('reviewOrder');
-			$location.path('/reviewOrder');
-			$route.reload();
-		  });
+			 
+			 if(NumPpl < 15) {
+				 flash('warning', 'catered event is for minimum 15 people');
+				 return;
+			 } else {
+				 var allowFlag = validateItems(NumPpl);
+				 console.log("Items allowed : " + allowFlag);
+				 if(allowFlag) {
+					 OrderService.reviewOrder($rootScope.userId,$rootScope.cartId,$scope.NumPpl).then(function(response){
+							$rootScope.orderRes = response.data.request_data_result;
+							$rootScope.coresults = SessionService.cart;
+							
+						  console.log('checkout res : '+$scope.orderRes.shipAddress.add1);
+						 // $state.go('reviewOrder');
+						$location.path('/reviewOrder');
+						$route.reload();
+					  });
+				 } else {
+					 return;
+				 }
+			 }
+			 
 		 };
 	 
 	 $scope.deleteItem = function(itemId) { 
@@ -249,6 +270,133 @@ app.controller('LoginCtrl', function ( $scope, $rootScope,  $facebook, $location
 		  }
 	  });
 	 };
+	 
+	 	function validateItems(NumPpl) {
+	 		var entrees = 0;
+	 		var sides = 0;
+	 		var appetizers = 0;
+	 		var desserts = 0;
+	 		var sandwiches = 0;
+	 		var total = 0;
+	 		var allowedItems = true;
+	 		$rootScope.coresults.cartItem.forEach(function(entry) {
+	 			if (entry.categoryId == 1) {	 		
+	 				appetizers += 1;
+	 				total += 1;
+	 			}
+	 			if (entry.categoryId == 2) {	 		
+	 				sides += 1;
+	 				total += 1;
+	 			}
+	 			if (entry.categoryId == 3) {	 		
+	 				desserts += 1;
+	 				total += 1;
+	 			}
+	 			if (entry.categoryId == 4) {	 		
+	 				entrees += 1;
+	 				total += 1;
+	 			}
+	 			if (entry.categoryId == 5) {	 		
+	 				sandwiches += 1;
+	 				total += 1;
+	 			}
+	 		});
+	 		console.log("No of appetizers :" + appetizers + "No of sides :" + sides + "No of desserts :" + desserts + "No of entrees :" + entrees + "No of sandwiches :" + sandwiches);
+	 		if($rootScope.orderType == "cater") {
+	 			switch(true) {
+		 			case (NumPpl >= 15 && NumPpl <= 99): 
+		 				if(appetizers > 2) {
+		 					flash('warning', 'Maximum only 2 appetizers are allowed');
+		 					allowedItems = false;
+		 				}
+			 			if(sides > 2) {
+		 					flash('warning', 'Maximum only 2 sides are allowed');
+					 		allowedItems = false;
+		 				}
+			 			if(desserts > 2) {
+		 					flash('warning', 'Maximum only 2 desserts are allowed');
+		 					allowedItems = false;
+		 				}	
+			 			if(entrees > 2) {
+		 					flash('warning', 'Maximum only 3 entrees are allowed');		
+		 					allowedItems = false;
+		 				}	
+			 			return allowedItems;
+		 				break;
+		 			case (NumPpl >= 100 && NumPpl <= 199):
+		 				if(appetizers > 3) {
+		 					flash('warning', 'Maximum only 3 appetizers are allowed');
+		 					allowedItems = false;
+		 				}	
+			 			if(sides > 3) {
+		 					flash('warning', 'Maximum only 3 sides are allowed');
+		 					allowedItems = false;
+		 				}	
+			 			if(desserts > 3) {
+		 					flash('warning', 'Maximum only 3 desserts are allowed');
+		 					allowedItems = false;
+		 				}
+			 			if(entrees > 4) {
+		 					flash('warning', 'Maximum only 4 entrees are allowed');
+		 					allowedItems = false;
+		 				}	
+			 			if(total > 12) {
+		 					flash('warning', 'Maximum only 12 items are allowed');
+		 					allowedItems = false;
+		 				}	
+			 			return allowedItems;
+		 				break;
+		 			case (NumPpl >= 200 && NumPpl <= 299):
+		 				if(appetizers > 3) {
+		 					flash('warning', 'Maximum only 3 appetizers are allowed');
+		 					allowedItems = false;
+		 				}
+			 			if(sides > 4) {
+		 					flash('warning', 'Maximum only 4 sides are allowed');
+		 					allowedItems = false;
+		 				}
+			 			if(desserts > 3) {
+		 					flash('warning', 'Maximum only 3 desserts are allowed');
+		 					allowedItems = false;
+		 				}
+			 			if(entrees > 5) {
+		 					flash('warning', 'Maximum only 5 entrees are allowed');
+		 					allowedItems = false;
+		 				}
+			 			if(total > 15) {
+		 					flash('warning', 'Maximum only 15 items are allowed');
+		 					allowedItems = false;
+		 				}
+			 			return allowedItems;
+		 				break;
+		 			case (NumPpl >= 300 && NumPpl <= 399):
+		 				if(appetizers > 4) {
+		 					flash('warning', 'Maximum only 4 appetizers are allowed');
+		 					allowedItems = false;
+		 				}
+			 			if(sides > 5) {
+		 					flash('warning', 'Maximum only 5 sides are allowed');
+		 					allowedItems = false;
+		 				}
+			 			if(desserts > 4) {
+		 					flash('warning', 'Maximum only 4 desserts are allowed');
+		 					allowedItems = false;
+		 				}
+			 			if(entrees > 5) {
+		 					flash('warning', 'Maximum only 5 entrees are allowed');
+		 					allowedItems = false;
+		 				}
+			 			if(total > 18) {
+		 					flash('warning', 'Maximum only 18 items are allowed');
+		 					allowedItems = false;
+		 				}
+			 			return allowedItems;
+		 				break;
+		 				default: 	
+		 					return allowedItems;
+	 			}
+	 		}
+	 	}
 	 
 	});
 
